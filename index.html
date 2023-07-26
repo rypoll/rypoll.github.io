@@ -1,9 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dynamic Table Example</title>
+  <title>Paginated and Sorted Table</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
 <body>
-    <iframe width="659" height="209" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSRyyEbdUT13gIWrhYVDT1kHL50AxZn-7eYnrmVdnBjE4I9HHhCWUyUgHgX1ElgdBkOpp5gwisZSTu4/pubchart?oid=148163227&amp;format=interactive"></iframe>
+  <div class="container">
+    <div class="dropdown-container">
+      <label for="weekSelect">Select Week Number:</label>
+      <select id="weekSelect"></select>
+    </div>
+    <div class="table-container">
+      <table id="myTable">
+        <!-- Column headers -->
+        <tr>
+          <th style="width: 50%;">Description</th>
+          <th style="width: 25%;">Links</th>
+          <th style="width: 25%;">Popularity</th>
+        </tr>
+      </table>
+    </div>
+
+    <div id="pagination"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
