@@ -1,3 +1,9 @@
+:root {
+  --light-grey: #d3d3d3; /* Define a variable for the light grey color */
+}
+
+
+
 body {
   display: flex;
   justify-content: center;
@@ -5,7 +11,9 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
-  background-color: #F0EAD6; /* Eggshell color */
+  background-color: #202123; /*  Eggshell color */
+  color: var(--light-grey);
+
 }
 
 .container {
@@ -30,11 +38,43 @@ body {
   width: 100%; /* Set table container width to 100% */
   max-width: 800px;
   margin: 0 auto;
-  background-color: #fff; /* White background for the table container */
+  background-color: #ccc4b1; /* White background for the table container */
   border: 1px solid #ccc; /* Optional: Add a border to the table container */
-  border-radius: 5px; /* Optional: Add rounded corners to the table container */
-  padding: 10px;
+  border-radius: 2px; /* Optional: Add rounded corners to the table container */
+  padding: 3px;
   overflow-x: hidden; /* Hide horizontal overflow */
+}
+
+.buttons-container {
+  width: 100%; /* Set table container width to 100% */
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ccc4b1; /* White background for the table container */
+  border: 1px solid #ccc; /* Optional: Add a border to the table container */
+  border-radius: 2px; /* Optional: Add rounded corners to the table container */
+  padding: 3px;
+  overflow-x: hidden; /* Hide horizontal overflow */
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Add some spacing from the top */
+  margin-bottom: 50px; /* Add some spacing from the top */
+}
+
+
+.weekly-button {
+  /* Add modern styles to the button */
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff; /* Blue background color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.weekly-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
 
@@ -42,7 +82,18 @@ table {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
+  width: 800px; /* Set your desired width */
+  height: 50px; /* Set your desired height */
+  table-layout:fixed;
 }
+
+td {
+  max-height: 50px; /* Set the maximum height for the table cells */
+  overflow: hidden; /* Hide any content that overflows the cell */
+  text-overflow: ellipsis; /* Add ellipsis (...) to indicate text overflow */
+  white-space: normal; /* Allow text to wrap within the cell */
+}
+
 
 th, td {
   border: none;
@@ -50,16 +101,26 @@ th, td {
   text-align: left;
 }
 
+td, th {
+  
+  overflow: hidden; /* Hide content that overflows the cell */
+  text-overflow: ellipsis; /* Display ellipsis (...) for overflow */
+}
+
+
+
+
 th {
-  background-color: #e7e1cf; /* Eggshell color for the header */
+  background-color: #ccc4b1; /* Eggshell color for the header */
+  color: #202123;
 }
 
 tr:nth-child(even) {
-  background-color: #fff; /* White background for odd rows */
+  background-color: #434654; /* White background for odd rows */
 }
 
 tr:nth-child(odd) {
-  background-color: #f9f4e8; /* Eggshell color for even rows */
+  background-color: #333641; /* Eggshell color for even rows */
 }
 
 #pagination {
@@ -68,10 +129,25 @@ tr:nth-child(odd) {
 }
 
 #pagination a {
-  color: blue; /* Blue color for the pagination link */
+  
+  color: var(--light-grey);
   text-decoration: underline; /* Underline to indicate hyperlink */
   margin-right: 10px; /* Add some spacing between the links */
+  font-weight: bold; /* Make the links bold */
+
 }
+
+
+a {
+  
+  color: var(--light-grey);
+  text-decoration: underline; /* Underline to indicate hyperlink */
+
+  font-weight: bold; /* Make the links bold */
+
+}
+
+
 
 #pagination a:last-child {
   margin-right: 0; /* Remove spacing from the last link */
@@ -79,15 +155,16 @@ tr:nth-child(odd) {
 
 /* Add styles for specific table headers */
 th:nth-child(1) {
-  width: 70%; /* Set width for the first column */
+  width: 54%; /* Set width for the first column */
+
 }
 
 th:nth-child(2) {
-  width: 20%; /* Set width for the second column */
+  width: 35%; /* Set width for the second column */
 }
 
 th:nth-child(3) {
-  width: 10%; /* Set width for the third column */
+  width: 6%; /* Set width for the third column */
 }
 
 /* Style the links in the second column */
@@ -99,6 +176,59 @@ td:nth-child(2) a {
   white-space: nowrap;
 }
 
+
+
 tr {
   height: 25px; /* Set the desired height for the rows */
+}
+
+
+table.inner-table tr {
+  background-color: transparent; /* Set background to transparent for Table B rows */
+}
+
+
+
+
+/* Add this CSS for the 3x3 table */
+table.inner-table {
+  font-size: 14px;
+  border-collapse: collapse;
+  width: 150px;
+  table-layout:fixed;
+}
+
+
+
+table.inner-table li {
+  list-style-type: disc;
+  margin-left: 2px;
+  line-height: 1.1;
+}
+
+/* Add this CSS to remove bullet points for the inner-table */
+table.inner-table ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* Add this CSS to align the link text properly */
+table.inner-table a {
+  padding-left: 1px;
+  display: inline;
+}
+
+
+
+/* Add this CSS to prevent text from wrapping and show ellipses (...) if it overflows */
+.inner-table td {
+  max-width: 150px; /* Adjust the value based on your needs */
+  width: 90px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 3px;
 }

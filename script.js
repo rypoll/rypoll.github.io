@@ -1,6 +1,5 @@
 const table = document.getElementById("myTable");
 const pagination = document.getElementById("pagination");
-const weekSelect = document.getElementById("weekSelect");
 const rowsPerPage = 5;
 let data = [];
 
@@ -21,19 +20,6 @@ function parseCSV(csvData) {
   return parsedData.data;
 }
 
-function populateDropDown() {
-  const weekNumbers = [...new Set(data.map((row) => row["Week Number"]))];
-  weekNumbers.sort((a, b) => b - a);
-
-  let optionsHTML = "";
-  weekNumbers.forEach((week) => {
-    optionsHTML += `<option value="${week}">Week ${week}</option>`;
-  });
-
-  weekSelect.innerHTML = optionsHTML;
-  weekSelect.addEventListener("change", filterByWeekNumber);
-}
-
 async function displayRows(pageNum, filteredData) {
   const startIndex = (pageNum - 1) * rowsPerPage;
   const endIndex = Math.min(startIndex + rowsPerPage, filteredData.length);
@@ -41,7 +27,7 @@ async function displayRows(pageNum, filteredData) {
   table.innerHTML = ""; // Clear existing rows
 
   // Insert column headings into the table
-  const columnHeadings = ["Description", "Links", "Popularity"];
+  const columnHeadings = ["Description", "Links", "Rank"];
   const headerRow = document.createElement("tr");
   columnHeadings.forEach((heading) => {
     const th = document.createElement("th");
@@ -63,27 +49,40 @@ function generateLinkList(links) {
   const linkList = links
     .slice(1, -1) // Remove the square brackets from the string
     .split(", ") // Convert the comma-separated string into an array
-    .map((link) => `<a href="${link}">${extractLinkText(link)}</a>`); // Create anchor tags for each link
+    .slice(0, 9) // Take only the first 9 links
+    .map((link, index) => {
+      return `${index + 1}. <a href="${link}">${extractLinkText(link)}</a>`; // Include the link number
+    });
 
-  return `<ol><li>${linkList.join("</li><li>")}</li></ol>`;
+  const numRows = Math.ceil(linkList.length / 3);
+
+  let tableB = "<table class='inner-table'>"; // Add the 'inner-table' class here
+
+  for (let i = 0; i < 3; i++) {
+    tableB += "<tr>";
+
+    for (let j = 0; j < numRows; j++) {
+      const index = j * 3 + i; // Change the index calculation to populate along columns
+
+      if (index < linkList.length) {
+        tableB += "<td>" + linkList[index] + "</td>";
+      } else {
+        tableB += "<td></td>";
+      }
+    }
+
+    tableB += "</tr>";
+  }
+
+  tableB += "</table>";
+
+  return tableB;
 }
 
 function extractLinkText(link) {
   const match = link.match(/(?:https?:\/\/)?(?:www\.)?([^./]+)\./i);
   const linkText = match ? match[1] : link;
   return linkText.charAt(0).toUpperCase() + linkText.slice(1);
-}
-
-function filterByWeekNumber() {
-  const selectedWeek = weekSelect.value;
-  const filteredData = data.filter((row) => row["Week Number"] == selectedWeek);
-
-  // Calculate number of pages for the filtered data
-  const numPages = Math.ceil(filteredData.length / rowsPerPage);
-  populatePagination(numPages);
-
-  // Display the first page of the filtered data
-  displayRows(1, filteredData);
 }
 
 function populatePagination(numPages) {
@@ -97,7 +96,6 @@ function populatePagination(numPages) {
 
 function setupPagination() {
   getData().then((data) => {
-    populateDropDown();
     const numPages = Math.ceil(data.length / rowsPerPage);
     populatePagination(numPages);
     displayRows(1, data);
