@@ -2,8 +2,6 @@
   --light-grey: #d3d3d3; /* Define a variable for the light grey color */
 }
 
-
-
 body {
   display: flex;
   justify-content: center;
@@ -11,9 +9,8 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
-  background-color: #202123; /*  Eggshell color */
+  background-color: #202123; /* Eggshell color */
   color: var(--light-grey);
-
 }
 
 .container {
@@ -22,6 +19,7 @@ body {
   align-items: center;
   padding: 50px; /* Add padding to create space around the table */
   position: relative; /* Set container as the reference for absolute positioning */
+  border-radius:8px;
 }
 
 .dropdown-container {
@@ -38,45 +36,83 @@ body {
   width: 100%; /* Set table container width to 100% */
   max-width: 800px;
   margin: 0 auto;
-  background-color: #ccc4b1; /* White background for the table container */
+  background-color: #f0f0f0; /* White background for the table container */
   border: 1px solid #ccc; /* Optional: Add a border to the table container */
-  border-radius: 2px; /* Optional: Add rounded corners to the table container */
-  padding: 3px;
+  border-radius: 8px; /* Optional: Add rounded corners to the table container */
+  padding: 4px;
   overflow-x: hidden; /* Hide horizontal overflow */
 }
 
+/* Add a style for the button container */
 .buttons-container {
-  width: 100%; /* Set table container width to 100% */
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #ccc4b1; /* White background for the table container */
-  border: 1px solid #ccc; /* Optional: Add a border to the table container */
-  border-radius: 2px; /* Optional: Add rounded corners to the table container */
-  padding: 3px;
-  overflow-x: hidden; /* Hide horizontal overflow */
   display: flex;
-  justify-content: center;
-  margin-top: 20px; /* Add some spacing from the top */
-  margin-bottom: 50px; /* Add some spacing from the top */
+  background-color: #f0f0f0; /* Set the background color for the buttons container */
+  border-radius: 8px; /* Add rounded corners for the buttons container */
+  overflow: hidden; /* Hide any overflow to keep the container visually clean */
+  margin-bottom: 20px; /* Add some space between the buttons container and the table container */
+  padding: 4px;
+  /*width: 800px;
+  //justify-content: center; */
+}
+
+/* Add styles for the buttons */
+.buttons-container button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+
+/* Add a style for the active button */
+.buttons-container button.active {
+  background-color:#77777a; /* Set the background color for the active button */
+  color: #fff; /* Set the text color for the active button */
+  border-radius: 8px;
+}
+
+/* Remove the default focus outline for the buttons on click */
+.buttons-container button:active,
+.buttons-container button:focus {
+  outline: none;
 }
 
 
-.weekly-button {
-  /* Add modern styles to the button */
+.monthly-button:hover,
+.quarterly-button:hover,
+.biannually-button:hover,
+.yearly-button:hover,
+.weekly-button:hover {
+  color:#77777a
+}
+
+/* Add styles for other buttons */
+.weekly-button,
+.monthly-button,
+.quarterly-button,
+.biannually-button,
+.yearly-button {
   padding: 12px 20px;
   font-size: 16px;
   font-weight: bold;
-  color: #fff;
-  background-color: #007bff; /* Blue background color */
+  color: #202123;
+  background-color: #77777a; /* Blue background color */
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.weekly-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+/* Add styles for the active state of other buttons */
+.monthly-button.active,
+.quarterly-button.active,
+.biannually-button.active,
+.yearly-button.active {
+  background-color: #77777a; /* Set the background color for the active button */
+  color: #202123; /* Set the text color for the active button */
 }
-
 
 table {
   width: 100%;
@@ -84,7 +120,7 @@ table {
   border-spacing: 0;
   width: 800px; /* Set your desired width */
   height: 50px; /* Set your desired height */
-  table-layout:fixed;
+  table-layout: fixed;
 }
 
 td {
@@ -94,24 +130,21 @@ td {
   white-space: normal; /* Allow text to wrap within the cell */
 }
 
-
-th, td {
+th,
+td {
   border: none;
   padding: 8px;
   text-align: left;
 }
 
-td, th {
-  
+td,
+th {
   overflow: hidden; /* Hide content that overflows the cell */
   text-overflow: ellipsis; /* Display ellipsis (...) for overflow */
 }
 
-
-
-
 th {
-  background-color: #ccc4b1; /* Eggshell color for the header */
+  background-color: #f0f0f0; /* Eggshell color for the header */
   color: #202123;
 }
 
@@ -129,25 +162,17 @@ tr:nth-child(odd) {
 }
 
 #pagination a {
-  
   color: var(--light-grey);
   text-decoration: underline; /* Underline to indicate hyperlink */
   margin-right: 10px; /* Add some spacing between the links */
   font-weight: bold; /* Make the links bold */
-
 }
-
 
 a {
-  
   color: var(--light-grey);
   text-decoration: underline; /* Underline to indicate hyperlink */
-
   font-weight: bold; /* Make the links bold */
-
 }
-
-
 
 #pagination a:last-child {
   margin-right: 0; /* Remove spacing from the last link */
@@ -156,7 +181,6 @@ a {
 /* Add styles for specific table headers */
 th:nth-child(1) {
   width: 54%; /* Set width for the first column */
-
 }
 
 th:nth-child(2) {
@@ -176,29 +200,21 @@ td:nth-child(2) a {
   white-space: nowrap;
 }
 
-
-
 tr {
   height: 25px; /* Set the desired height for the rows */
 }
 
-
 table.inner-table tr {
   background-color: transparent; /* Set background to transparent for Table B rows */
 }
-
-
-
 
 /* Add this CSS for the 3x3 table */
 table.inner-table {
   font-size: 14px;
   border-collapse: collapse;
   width: 150px;
-  table-layout:fixed;
+  table-layout: fixed;
 }
-
-
 
 table.inner-table li {
   list-style-type: disc;
@@ -213,15 +229,11 @@ table.inner-table ul {
   padding: 0;
 }
 
-
-
 /* Add this CSS to align the link text properly */
 table.inner-table a {
   padding-left: 1px;
   display: inline;
 }
-
-
 
 /* Add this CSS to prevent text from wrapping and show ellipses (...) if it overflows */
 .inner-table td {
@@ -231,4 +243,86 @@ table.inner-table a {
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 3px;
+}
+.month-button-container,
+.week-button-container {
+  display: flex;
+  background-color: #f0f0f0; /* Set the background color for the buttons container */
+  border-radius: 8px; /* Add rounded corners for the buttons container */
+  overflow: hidden; /* Hide any overflow to keep the container visually clean */
+  margin-bottom: 0px; /* Add some space between the buttons container and the table container */
+  padding: 4px;
+  font-size:14px;
+}
+
+
+
+/* Add styles for the new dynamic buttons container */
+.dynamic-buttons-container {
+  display: flex; /* Display the buttons in a row */
+  justify-content: center; /* Center the buttons horizontally within the container */
+  flex-wrap: wrap; /* Allow buttons to wrap to a new line */
+  margin-top: 0px; /* Add some space between the new container and the table container */
+  /* ... Existing styles ... */
+  /*width:800px;*/
+  background-color: #f0f0f0; /* Set the background color for the buttons container */
+  border-radius: 8px; /* Add rounded corners for the buttons container */
+  overflow: hidden; /* Hide any overflow to keep the container visually clean */
+  margin-bottom: 20px; /* Add some space between the buttons container and the table container */
+  padding: 4px
+  
+
+
+
+}
+
+/* Add styles for the week number buttons */
+.month-button-container button,
+.week-button-container button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;/* Set the default background color for the week number buttons */
+}
+
+/* Add styles for the active state of week number buttons */
+.month-button-container button.active,
+.week-button-container button.active{
+  background-color:#777a77; /* Set the background color for the active button */
+  color: #fff; /* Set the text color for the active button */
+  border-radius: 8px;
+}
+
+.week-container button:active,
+.week-container button:focus {
+  outline: none;
+}
+
+/* Add styles for the buttons */
+.month-button,
+.week-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #202123;
+  background-color: #77777a; /* Blue background color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Add styles for the active state of the week buttons */
+.month-buton.active,
+.week-button.active {
+  background-color: #77777a !important; /* Set the background color for the active week button */
+  color: #fff; /* Set the text color for the active week button */
+}
+
+.month-button:hover,
+.week-button:hover {
+  color:#77777a
 }

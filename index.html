@@ -10,12 +10,18 @@
   <div class="container">
     <div class="buttons-container">
       <div class="weekly-button-container">
-        <button class="weekly-button">Weekly</button>
+        <button class="period-button weekly-button active" onclick="switchPeriodType('weekly')" data-period="weekly">Weekly</button>
+      </div>
+      <div class="monthly-button-container">
+        <button class="period-button monthly-button" onclick="switchPeriodType('monthly')" data-period="monthly">Monthly</button>
       </div>
     </div>
+
+    <!-- New container for dynamic buttons -->
+    <div class="dynamic-buttons-container">
+      <!-- Buttons will be added here -->
+    </div>
   
-
-
     <div class="table-container">
       <table id="myTable">
         <!-- Column headers -->
