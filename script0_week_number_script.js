@@ -33,18 +33,10 @@ function filterByWeekNumber(weekNumber) {
   
 
 
-function getWeekLabel(week, year) {
-  const weekStart = new Date(year, 0, 2 + (week - 1) * 7);
-  
-  // We subtract 1 from the end date calculation to get the correct end date
-  const weekEnd = new Date(year, 0, 1 + week * 7);
-  
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  
-  return `${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} - 
-          ${monthNames[weekEnd.getMonth()]} ${weekEnd.getDate()}`;
+function getWeekLabel(weekNumber) {
+  return weekLabels[weekNumber];
 }
+
 
 
 function generateWeekButtonsInRange(startingWeek, endingWeek) {
@@ -93,7 +85,6 @@ function showNextWeeks(startingWeek) {
 
 
 function generateWeekButtons() {
-  
   const dynamicButtonsContainer = document.querySelector(".dynamic-buttons-container");
   const currentWeek = getWeekNumber(new Date());
   const numWeeksToShow = 5;
@@ -103,28 +94,37 @@ function generateWeekButtons() {
     startingWeek = 1;
   }
 
-  startingWeek = Math.min(startingWeek, currentWeek);
+  // Get the maximum week number available in the data
+  getData().then((maxWeekNumber) => {
+    // Update the startingWeek and numWeeksToShow based on the available data
+    startingWeek = Math.min(startingWeek, maxWeekNumber - numWeeksToShow + 1);
+    const endingWeek = Math.min(startingWeek + numWeeksToShow - 1, maxWeekNumber);
 
-  let buttonsHTML = "";
+    let buttonsHTML = "";
 
-  if (startingWeek > 1) {
-    buttonsHTML += `<div class="week-button-container">
+    if (startingWeek > 1) {
+      buttonsHTML += `<div class="week-button-container">
                         <button class="arrow-button" onclick="showPreviousWeeks(${startingWeek - 1})"><<</button>
                     </div>`;
-  }
+    }
 
-  for (let i = startingWeek; i <= startingWeek + numWeeksToShow - 1; i++) {
+    for (let i = startingWeek; i <= endingWeek; i++) {
+      // Check if the week number has a corresponding label in weekLabels
+      if (weekLabels[i]) {
+        buttonsHTML += `<div class="week-button-container">
+                          <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
+                      </div>`;
+      }
+    }
+
     buttonsHTML += `<div class="week-button-container">
-                        <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
-                    </div>`;
-  }
-
-  buttonsHTML += `<div class="week-button-container">
-                      <button class="arrow-button ${currentWeek >= getWeekNumber(new Date()) ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + numWeeksToShow})">>></button>
+                      <button class="arrow-button ${endingWeek >= currentWeek ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + numWeeksToShow})">>></button>
                   </div>`;
 
-  dynamicButtonsContainer.innerHTML = buttonsHTML;
+    dynamicButtonsContainer.innerHTML = buttonsHTML;
+  });
 }
+
 
 
 

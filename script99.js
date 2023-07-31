@@ -4,6 +4,8 @@ const buttonsContainer = document.querySelector(".buttons-container");
 const rowsPerPage = 5;
 let data = [];
 
+let weekLabels = {};
+
 async function getData() {
   const response = await fetch("03a-summarised-w-seo-csv.csv");
   const csvData = await response.text();
@@ -13,17 +15,26 @@ async function getData() {
 
   data = parsedData;
 
+  data.forEach(row => {
+    weekLabels[row['Week Number']] = row['week_label'];
+  });
+
   const maxWeekNumber = Math.max(...data.map(row => +row["Week Number"]));
 
   return maxWeekNumber;
 }
 
 // start execution
+// start execution
 getData()
   .then((currentWeek) => {
+    // Move the generateWeekButtons() call inside the .then() block
     generateWeekButtons();
     filterByWeekNumber(currentWeek);
   });
+
+// Rest of your code...
+
 
 function parseCSV(csvData) {
   const parsedData = Papa.parse(csvData, { header: true, skipEmptyLines: true });
