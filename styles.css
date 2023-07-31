@@ -65,6 +65,7 @@ body {
   cursor: pointer;
   outline: none;
   transition: background-color 0.2s ease;
+  
 }
 
 /* Add a style for the active button */
@@ -253,6 +254,16 @@ table.inner-table a {
   margin-bottom: 0px; /* Add some space between the buttons container and the table container */
   padding: 4px;
   font-size:14px;
+  position:relative;
+  text-align: center;
+  flex-grow: 5;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+
+
+  
 }
 
 
@@ -260,8 +271,8 @@ table.inner-table a {
 /* Add styles for the new dynamic buttons container */
 .dynamic-buttons-container {
   display: flex; /* Display the buttons in a row */
-  justify-content: center; /* Center the buttons horizontally within the container */
-  flex-wrap: wrap; /* Allow buttons to wrap to a new line */
+  justify-content: space-between; /* Center the buttons horizontally within the container */
+  flex-wrap: nowrap; /* Allow buttons to wrap to a new line */
   margin-top: 0px; /* Add some space between the new container and the table container */
   /* ... Existing styles ... */
   /*width:800px;*/
@@ -269,17 +280,41 @@ table.inner-table a {
   border-radius: 8px; /* Add rounded corners for the buttons container */
   overflow: hidden; /* Hide any overflow to keep the container visually clean */
   margin-bottom: 20px; /* Add some space between the buttons container and the table container */
-  padding: 4px
+  padding: 4px;
+  width: 800px;
+  align-items:  center;
+
   
 
 
 
 }
 
+.arrow-button {
+  flex-shrink: 0; /* Prevent the button from shrinking */
+  /* ... your other styles ... */
+}
+
+.arrow-container {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* For the left arrow, use 'flex-start'. For the right arrow, use 'flex-end'. */
+}
+
+.arrow-button-container:first-child {
+  left: 0;
+}
+
+.arrow-button-container:last-child {
+  right: 0;
+}
+
+
 /* Add styles for the week number buttons */
 .month-button-container button,
 .week-button-container button {
-  flex: 1;
+  display:grid;
+  flex:1;
   padding: 10px;
   border: none;
   background-color: transparent;
@@ -287,7 +322,19 @@ table.inner-table a {
   cursor: pointer;
   outline: none;
   transition: background-color 0.2s ease;/* Set the default background color for the week number buttons */
+  
+  border-radius: 0;
+  white-space: nowrap;
+
+
+
+
 }
+
+
+
+
+
 
 /* Add styles for the active state of week number buttons */
 .month-button-container button.active,
@@ -313,6 +360,7 @@ table.inner-table a {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
 }
 
 /* Add styles for the active state of the week buttons */
@@ -325,4 +373,8 @@ table.inner-table a {
 .month-button:hover,
 .week-button:hover {
   color:#77777a
+}
+
+.invisible {
+  visibility: hidden;
 }
