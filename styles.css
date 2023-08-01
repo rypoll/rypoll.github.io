@@ -378,3 +378,24 @@ table.inner-table a {
 .invisible {
   visibility: hidden;
 }
+
+
+button.invisible {
+  visibility: hidden;
+}
+
+/* Add custom styles for title and description */
+.title {
+  font-size: 48px;
+  color: white;
+  margin-top: -100px;
+  text-align: center;
+}
+
+.description {
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: -20px;
+}

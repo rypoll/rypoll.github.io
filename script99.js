@@ -124,15 +124,18 @@ function populatePagination(numPages) {
 
 
 
+let isWeeklyButtonActive = true; // Keep track of the active button
 
 async function gotoPage(pageNum) {
   let filteredData;
 
-  if (document.querySelector('.weekly-button').classList.contains('active')) {
-    const weekNumber = document.querySelector('.week-button.active').textContent;
+  if (isWeeklyButtonActive) {
+    // Filter by week number when the weekly button is active
+    const weekNumber = document.querySelector('.week-button.active').dataset.week;
     filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
-  } else if (document.querySelector('.monthly-button').classList.contains('active')) {
-    const monthNumber = document.querySelector('.month-button.active').textContent;
+  } else {
+    // Filter by month number when the monthly button is active
+    const monthNumber = document.querySelector('.month-button.active').dataset.month;
     filteredData = data.filter(row => {
       const month = row['wc_date'].split('/')[1];
       return month === String(monthNumber).padStart(2, '0');
@@ -144,13 +147,20 @@ async function gotoPage(pageNum) {
 
 
 
+
 document.querySelector('.weekly-button').addEventListener('click', function() {
-  // Remove 'active' class from monthly button and add it to the weekly button
-  document.querySelector('.monthly-button').classList.remove('active');
+  // Update the isWeeklyButtonActive variable and set it to true
+  isWeeklyButtonActive = true;
   this.classList.add('active');
-  
+
+  // Remove 'active' class from monthly button
+  document.querySelector('.monthly-button').classList.remove('active');
+
   // Call function to generate week buttons
   generateWeekButtons();
+
+  // Call the filter function with the current page
+  gotoPage(1);
 });
 
 document.querySelector('.monthly-button').addEventListener('click', function() {
@@ -167,3 +177,5 @@ document.querySelector('.monthly-button').addEventListener('click', function() {
   // Call function to filter data by the current month
   filterByMonthNumber(currentMonth);
 });
+
+

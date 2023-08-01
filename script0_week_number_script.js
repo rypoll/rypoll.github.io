@@ -42,26 +42,36 @@ function getWeekLabel(weekNumber) {
 function generateWeekButtonsInRange(startingWeek, endingWeek) {
   const dynamicButtonsContainer = document.querySelector(".dynamic-buttons-container");
   const currentWeek = getWeekNumber(new Date());
+  const weekNumbers = Object.keys(weekLabels).map(Number).sort((a, b) => a - b);
+  const maxWeekNumber = Math.max(...weekNumbers);
+  const minWeekNumber = Math.min(...weekNumbers);
   let buttonsHTML = "";
 
-  if (startingWeek > 1) {
+  if (startingWeek > minWeekNumber) {
     buttonsHTML += `<div class="week-button-container">
                         <button class="arrow-button" onclick="showPreviousWeeks(${startingWeek - 1})"><<</button>
                     </div>`;
   }
 
   for (let i = startingWeek; i <= endingWeek; i++) {
-    buttonsHTML += `<div class="week-button-container">
+    // Check if the week number has a corresponding label in weekLabels
+    if (weekLabels[i]) {
+      buttonsHTML += `<div class="week-button-container">
                         <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
                     </div>`;
+    }
   }
 
   buttonsHTML += `<div class="week-button-container">
-                      <button class="arrow-button ${endingWeek >= currentWeek ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + 1})">>></button>
+                      <button class="arrow-button ${endingWeek >= maxWeekNumber ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + 1})">>></button>
                   </div>`;
 
   dynamicButtonsContainer.innerHTML = buttonsHTML;
 }
+
+
+
+
 
 
 // Function to show the previous weeks
@@ -87,43 +97,39 @@ function showNextWeeks(startingWeek) {
 function generateWeekButtons() {
   const dynamicButtonsContainer = document.querySelector(".dynamic-buttons-container");
   const currentWeek = getWeekNumber(new Date());
-  const numWeeksToShow = 5;
-  let startingWeek = Math.max(1, currentWeek - numWeeksToShow + 1);
+  const weekNumbers = Object.keys(weekLabels).map(Number).sort((a, b) => a - b);
+  const maxWeekNumber = Math.max(...weekNumbers);
+  const minWeekNumber = Math.min(...weekNumbers);
+  const numWeeksToShow = Math.min(5, maxWeekNumber - minWeekNumber + 1);
+  let startingWeek = Math.max(minWeekNumber, currentWeek - numWeeksToShow + 1);
 
-  if (currentWeek < numWeeksToShow) {
-    startingWeek = 1;
-  }
+  let buttonsHTML = "";
 
-  // Get the maximum week number available in the data
-  getData().then((maxWeekNumber) => {
-    // Update the startingWeek and numWeeksToShow based on the available data
-    startingWeek = Math.min(startingWeek, maxWeekNumber - numWeeksToShow + 1);
-    const endingWeek = Math.min(startingWeek + numWeeksToShow - 1, maxWeekNumber);
-
-    let buttonsHTML = "";
-
-    if (startingWeek > 1) {
-      buttonsHTML += `<div class="week-button-container">
+  if (startingWeek > minWeekNumber) {
+    buttonsHTML += `<div class="week-button-container">
                         <button class="arrow-button" onclick="showPreviousWeeks(${startingWeek - 1})"><<</button>
                     </div>`;
-    }
+  }
 
-    for (let i = startingWeek; i <= endingWeek; i++) {
-      // Check if the week number has a corresponding label in weekLabels
-      if (weekLabels[i]) {
-        buttonsHTML += `<div class="week-button-container">
-                          <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
-                      </div>`;
-      }
+  for (let i = startingWeek; i <= startingWeek + numWeeksToShow - 1; i++) {
+    // Check if the week number has a corresponding label in weekLabels
+    if (weekLabels[i]) {
+      buttonsHTML += `<div class="week-button-container">
+                        <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
+                    </div>`;
     }
+  }
 
-    buttonsHTML += `<div class="week-button-container">
-                      <button class="arrow-button ${endingWeek >= currentWeek ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + numWeeksToShow})">>></button>
+  buttonsHTML += `<div class="week-button-container">
+                      <button class="arrow-button ${currentWeek >= maxWeekNumber ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + numWeeksToShow})">>></button>
                   </div>`;
 
-    dynamicButtonsContainer.innerHTML = buttonsHTML;
-  });
+  dynamicButtonsContainer.innerHTML = buttonsHTML;
 }
+
+
+
+
 
 
 

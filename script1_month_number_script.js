@@ -8,7 +8,7 @@ function getCurrentMonth(d) {
 function filterByMonthNumber(monthNumber) {
   const filteredData = data.filter(row => {
     // Extract month from the 'wc_date' column
-    const month = row['wc_date'].split('/')[1];
+    const month = row['date'].split('/')[1];
     return month === String(monthNumber).padStart(2, '0'); // Convert monthNumber to string and pad with leading zero if necessary
   });
 
