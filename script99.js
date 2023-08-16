@@ -7,7 +7,7 @@ let data = [];
 let weekLabels = {};
 
 async function getData() {
-  const response = await fetch("03a-summarised-w-seo-csv.csv");
+  const response = await fetch("02a-summarised-w-seo-csv.csv");
   const csvData = await response.text();
   const parsedData = parseCSV(csvData);
 
@@ -16,7 +16,7 @@ async function getData() {
   data = parsedData;
 
   data.forEach(row => {
-    weekLabels[row['Week Number']] = row['week_label'];
+    weekLabels[row['Week Number']] = row['Week Range'];
   });
 
   const maxWeekNumber = Math.max(...data.map(row => +row["Week Number"]));
@@ -44,6 +44,10 @@ function parseCSV(csvData) {
 async function displayRows(pageNum, filteredData) {
   const startIndex = (pageNum - 1) * rowsPerPage;
   const endIndex = Math.min(startIndex + rowsPerPage, filteredData.length);
+  console.log("Start Index:", startIndex);
+  console.log("End Index:", endIndex);
+  console.log("Data to display:", filteredData.slice(startIndex, endIndex));
+
 
   table.innerHTML = "";
 
@@ -63,6 +67,8 @@ async function displayRows(pageNum, filteredData) {
                      <td>${filteredData[i]["L"]}</td>`;
     table.appendChild(row);
   }
+
+
 }
 
 function generateLinkList(links) {
@@ -105,14 +111,57 @@ function extractLinkText(link) {
   return linkText.charAt(0).toUpperCase() + linkText.slice(1);
 }
 
+let currentPage = 1;
+let currentStartPage = 1; // This tracks the first page number in the current pagination view
+
 function populatePagination(numPages) {
+  const maxPagesToShow = 10;
+  
   let paginationHTML = "";
-  for (let i = 1; i <= numPages; i++) {
-    paginationHTML += `<a href="#" onclick="gotoPage(${i})">${i}</a>`;
+
+  // If there are pages before the current starting page, add a left arrow
+  if (currentStartPage > 1) {
+    paginationHTML += `<a href="#" onclick="shiftPagination(-1)">&larr;</a>`;
+  }
+
+  for (let i = 0; i < maxPagesToShow && (i + currentStartPage) <= numPages; i++) {
+    const pageNum = i + currentStartPage;
+    paginationHTML += `<a href="#" class="${pageNum === currentPage ? 'active-page' : ''}" onclick="gotoPage(${pageNum})">${pageNum}</a>`;
+  }
+
+  // If there are more pages to show after the current view, add a right arrow
+  if (currentStartPage + maxPagesToShow <= numPages) {
+    paginationHTML += `<a href="#" onclick="shiftPagination(1)">&rarr;</a>`;
   }
 
   pagination.innerHTML = paginationHTML;
 }
+
+function shiftPagination(direction) {
+  const shiftBy = direction * 10;
+  currentStartPage += shiftBy;
+
+  const activeWeekButton = document.querySelector('.week-button.active');
+  let filteredData;
+
+  if (activeWeekButton) {
+    const weekNumber = activeWeekButton.dataset.week;
+    filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
+  } else {
+    const monthButton = document.querySelector('.month-button.active');
+    if (monthButton) {
+      const monthNumber = monthButton.dataset.monthNumber;
+      filteredData = data.filter(row => {
+        const month = row['wc_date'].split('/')[1];
+        return month === String(monthNumber).padStart(2, '0');
+      });
+    }
+  }
+
+  const numPages = Math.ceil(filteredData.length / rowsPerPage);
+  populatePagination(numPages);
+}
+
 
 
 
@@ -127,22 +176,59 @@ function populatePagination(numPages) {
 let isWeeklyButtonActive = true; // Keep track of the active button
 
 async function gotoPage(pageNum) {
+  console.log("Going to page:", pageNum);
+  console.log("Original data length:", data.length);
+
+  const activeWeekButton = document.querySelector('.week-button.active');
+  console.log("Active week button:", activeWeekButton);
+
+  const activeMonthButton = document.querySelector('.month-button.active');
+  console.log("Active month button:", activeMonthButton);
+
+
   let filteredData;
 
-  if (isWeeklyButtonActive) {
-    // Filter by week number when the weekly button is active
-    const weekNumber = document.querySelector('.week-button.active').dataset.week;
-    filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
-  } else {
-    // Filter by month number when the monthly button is active
-    const monthNumber = document.querySelector('.month-button.active').dataset.month;
-    filteredData = data.filter(row => {
-      const month = row['wc_date'].split('/')[1];
-      return month === String(monthNumber).padStart(2, '0');
-    });
+  // Check for the week button
+  const weekButton = document.querySelector('.week-button.active');
+  if (weekButton) {
+      const weekNumber = weekButton.dataset.week;
+      filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
+  } 
+
+  // Check for the month button
+  const monthButton = document.querySelector('.month-button.active');
+  if (monthButton) {
+      const monthNumber = monthButton.dataset.monthNumber;
+      filteredData = data.filter(row => {
+          const month = row['wc_date'].split('/')[1];
+          return month === String(monthNumber).padStart(2, '0');
+      });
   }
 
+
+  if (weekButton) {
+    const weekNumber = weekButton.dataset.week;
+    filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
+    console.log("Filtered by week:", filteredData);
+} 
+
+if (monthButton) {
+    const monthNumber = monthButton.dataset.monthNumber;
+    console.log("Button's month dataset:", monthButton.dataset.month);
+
+    filteredData = data.filter(row => {
+        const month = row['wc_date'].split('/')[1];
+        console.log("Expected month number:", monthNumber);
+        console.log("Row's month:", month);
+
+        return month === String(monthNumber).padStart(2, '0');
+    });
+    console.log("Filtered by month:", filteredData);
+}
+
+
   displayRows(pageNum, filteredData);
+
 }
 
 

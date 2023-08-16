@@ -8,7 +8,7 @@ function getCurrentMonth(d) {
 function filterByMonthNumber(monthNumber) {
   const filteredData = data.filter(row => {
     // Extract month from the 'wc_date' column
-    const month = row['date'].split('/')[1];
+    const month = row['Date'].split('/')[1];
     return month === String(monthNumber).padStart(2, '0'); // Convert monthNumber to string and pad with leading zero if necessary
   });
 
@@ -46,7 +46,7 @@ function generateMonthButtonsInRange(startingMonth, endingMonth) {
 
   if (startingMonth > 1) {
     buttonsHTML += `<div class="month-button-container">
-                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})"><<</button>
+                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})">↑</button>
                     </div>`;
   }
 
@@ -57,7 +57,7 @@ function generateMonthButtonsInRange(startingMonth, endingMonth) {
   }
 
   buttonsHTML += `<div class="month-button-container">
-                      <button class="arrow-button ${endingMonth >= currentMonth ? 'invisible' : ''}" onclick="showNextMonths(${startingMonth + 1})">>></button>
+                      <button class="arrow-button ${endingMonth >= currentMonth ? 'invisible' : ''}" onclick="showNextMonths(${startingMonth + 1})">↓</button>
                   </div>`;
 
   dynamicButtonsContainer.innerHTML = buttonsHTML;
@@ -103,7 +103,7 @@ function generateMonthButtons() {
 
   if (startingMonth > 1) {
     buttonsHTML += `<div class="month-button-container">
-                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})"><<</button>
+                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})">↑</button>
                     </div>`;
   }
 
@@ -114,7 +114,7 @@ function generateMonthButtons() {
   }
 
   buttonsHTML += `<div class="month-button-container">
-                      <button class="arrow-button ${currentMonth >= currentMonth ? 'invisible' : ''}" onclick="showNextMonths(${startingMonth + 1})">>></button>
+                      <button class="arrow-button ${currentMonth >= currentMonth ? 'invisible' : ''}" onclick="showNextMonths(${startingMonth + 1})">↓</button>
                   </div>`;
 
   dynamicButtonsContainer.innerHTML = buttonsHTML;

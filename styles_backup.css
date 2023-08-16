@@ -153,18 +153,7 @@ body {
 
 
 
-/* Add styles for the buttons */
-.buttons-container button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  background-color: transparent;
-  font-size: 12px;
-  cursor: pointer;
-  outline: none;
-  transition: background-color 0.2s ease;
-  
-}
+
 
 /* Add a style for the active button */
 .buttons-container button.active {
