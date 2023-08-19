@@ -26,6 +26,7 @@ function filterByMonthNumber(monthNumber) {
       button.classList.add('active');
     }
   });
+  adjustTableToFit();
 }
 
 
@@ -34,7 +35,7 @@ function filterByMonthNumber(monthNumber) {
 
 // Define function to convert month number to three-letter abbreviation
 function monthNumberToName(monthNumber) {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   return months[monthNumber - 1];
 }
 
@@ -44,11 +45,10 @@ function generateMonthButtonsInRange(startingMonth, endingMonth) {
   const currentMonth = getCurrentMonth(new Date());
   let buttonsHTML = "";
 
-  if (startingMonth > 1) {
-    buttonsHTML += `<div class="month-button-container">
-                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})">↑</button>
-                    </div>`;
-  }
+  const downArrowClass = startingMonth <= 1 ? 'disabled' : '';
+  buttonsHTML += `<div class="month-button-container">
+                      <button class="arrow-button ${downArrowClass}" onclick="showPreviousMonths(${startingMonth - 1})">↓</button>
+                  </div>`;
 
   for (let i = startingMonth; i <= endingMonth; i++) {
     buttonsHTML += `<div class="month-button-container">
@@ -56,8 +56,9 @@ function generateMonthButtonsInRange(startingMonth, endingMonth) {
                     </div>`;
   }
 
+  const upArrowClass = endingMonth >= currentMonth ? 'disabled' : '';
   buttonsHTML += `<div class="month-button-container">
-                      <button class="arrow-button ${endingMonth >= currentMonth ? 'invisible' : ''}" onclick="showNextMonths(${startingMonth + 1})">↓</button>
+                      <button class="arrow-button ${upArrowClass}" onclick="showNextMonths(${startingMonth + 1})">↑</button>
                   </div>`;
 
   dynamicButtonsContainer.innerHTML = buttonsHTML;
@@ -68,19 +69,33 @@ function generateMonthButtonsInRange(startingMonth, endingMonth) {
 
 
 
+
+
 function showPreviousMonths(startingMonth) {
   const numMonthsToShow = 5;
-  const endingMonth = Math.min(startingMonth + numMonthsToShow - 1, getCurrentMonth(new Date()));
 
+  if (startingMonth < 1) return;
+
+  const endingMonth = Math.min(startingMonth + numMonthsToShow - 1, getCurrentMonth(new Date()));
   generateMonthButtonsInRange(startingMonth, endingMonth);
 }
+
 
 function showNextMonths(startingMonth) {
   const numMonthsToShow = 5;
-  const endingMonth = Math.min(startingMonth + numMonthsToShow - 1, getCurrentMonth(new Date()));
+  const currentMonth = getCurrentMonth(new Date());
 
+  // If starting month + 5 (i.e., next set of months) would surpass the current month,
+  // we should start from currentMonth - 4 to just display previous 5 months without changing the count.
+  if (startingMonth + numMonthsToShow - 1 > currentMonth) {
+    startingMonth = currentMonth - numMonthsToShow + 1;
+  }
+
+  const endingMonth = Math.min(startingMonth + numMonthsToShow - 1, currentMonth);
   generateMonthButtonsInRange(startingMonth, endingMonth);
 }
+
+
 
 
 
@@ -103,7 +118,7 @@ function generateMonthButtons() {
 
   if (startingMonth > 1) {
     buttonsHTML += `<div class="month-button-container">
-                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})">↑</button>
+                        <button class="arrow-button" onclick="showPreviousMonths(${startingMonth - 1})">↓</button>
                     </div>`;
   }
 
@@ -113,8 +128,9 @@ function generateMonthButtons() {
                     </div>`;
   }
 
+  // Add a condition to check if the last button displayed is the current month and add 'disabled' class to up arrow
   buttonsHTML += `<div class="month-button-container">
-                      <button class="arrow-button ${currentMonth >= currentMonth ? 'invisible' : ''}" onclick="showNextMonths(${startingMonth + 1})">↓</button>
+                      <button class="arrow-button ${currentMonth === startingMonth + numMonthsToShow - 1 ? 'disabled' : ''}" onclick="showNextMonths(${startingMonth + 1})">↑</button>
                   </div>`;
 
   dynamicButtonsContainer.innerHTML = buttonsHTML;

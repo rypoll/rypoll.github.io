@@ -20,17 +20,19 @@ async function getData() {
   });
 
   const maxWeekNumber = Math.max(...data.map(row => +row["Week Number"]));
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
 
-  return maxWeekNumber;
+  return formattedDate;
 }
 
 // start execution
 // start execution
 getData()
-  .then((currentWeek) => {
+  .then((formattedDate) => {
     // Move the generateWeekButtons() call inside the .then() block
-    generateWeekButtons();
-    filterByWeekNumber(currentWeek);
+    generateDateButtons();
+    filterByDate(formattedDate);
   });
 
 // Rest of your code...
@@ -64,9 +66,9 @@ async function displayRows(pageNum, filteredData) {
     const row = document.createElement("tr");
     row.innerHTML = `<td>${filteredData[i]["Topic summary"]}</td>
                      <td>${generateLinkList(filteredData[i]["Associated Links"])}</td>
-                     <td>${filteredData[i]["L"]}</td>`;
+                     <td>${formatNumber(filteredData[i]["L"])}</td>`;
     table.appendChild(row);
-  }
+}
 
 
 }
@@ -173,95 +175,100 @@ function shiftPagination(direction) {
 
 
 
-let isWeeklyButtonActive = true; // Keep track of the active button
+let isDailyButtonActive = true; // Keep track of the active button
 
-async function gotoPage(pageNum) {
+function gotoPage(pageNum) {
+  currentPage = pageNum;
   console.log("Going to page:", pageNum);
   console.log("Original data length:", data.length);
-
-  const activeWeekButton = document.querySelector('.week-button.active');
-  console.log("Active week button:", activeWeekButton);
-
-  const activeMonthButton = document.querySelector('.month-button.active');
-  console.log("Active month button:", activeMonthButton);
-
 
   let filteredData;
 
   // Check for the week button
   const weekButton = document.querySelector('.week-button.active');
   if (weekButton) {
-      const weekNumber = weekButton.dataset.week;
-      filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
+    const weekNumber = weekButton.dataset.week;
+    filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
+    console.log("Filtered by week:", filteredData);
   } 
 
   // Check for the month button
   const monthButton = document.querySelector('.month-button.active');
   if (monthButton) {
-      const monthNumber = monthButton.dataset.monthNumber;
-      filteredData = data.filter(row => {
-          const month = row['wc_date'].split('/')[1];
-          return month === String(monthNumber).padStart(2, '0');
-      });
-  }
-
-
-  if (weekButton) {
-    const weekNumber = weekButton.dataset.week;
-    filteredData = data.filter(row => +row["Week Number"] === +weekNumber);
-    console.log("Filtered by week:", filteredData);
-} 
-
-if (monthButton) {
     const monthNumber = monthButton.dataset.monthNumber;
     console.log("Button's month dataset:", monthButton.dataset.month);
 
     filteredData = data.filter(row => {
-        const month = row['wc_date'].split('/')[1];
-        console.log("Expected month number:", monthNumber);
-        console.log("Row's month:", month);
+      const month = row['wc_date'].split('/')[1];
+      console.log("Expected month number:", monthNumber);
+      console.log("Row's month:", month);
 
-        return month === String(monthNumber).padStart(2, '0');
+      return month === String(monthNumber).padStart(2, '0');
     });
     console.log("Filtered by month:", filteredData);
+  }
+
+  // Only call displayRows if filteredData has value
+  if (filteredData && filteredData.length > 0) {
+    displayRows(pageNum, filteredData);
+  } else {
+    console.error("No data to display");
+  }
 }
 
 
-  displayRows(pageNum, filteredData);
-
-}
-
-
-
-
-document.querySelector('.weekly-button').addEventListener('click', function() {
+document.querySelector('.daily-button').addEventListener('click', function() {
   // Update the isWeeklyButtonActive variable and set it to true
-  isWeeklyButtonActive = true;
+  isDailyButtonActive = true;
   this.classList.add('active');
 
   // Remove 'active' class from monthly button
   document.querySelector('.monthly-button').classList.remove('active');
+  document.querySelector('.weekly-button').classList.remove('active');
 
   // Call function to generate week buttons
-  generateWeekButtons();
+  generateDateButtons();
+  resetPagination();
 
   // Call the filter function with the current page
   gotoPage(1);
+
+  adjustTableToFit();
+});
+
+
+document.querySelector('.weekly-button').addEventListener('click', function() {
+  // Update the isWeeklyButtonActive variable and set it to true
+
+  this.classList.add('active');
+
+  // Remove 'active' class from monthly button
+  document.querySelector('.monthly-button').classList.remove('active');
+  document.querySelector('.daily-button').classList.remove('active');
+  // Call function to generate week buttons
+  generateWeekButtons();
+  resetPagination();
+
+  // Call the filter function with the current page
+  gotoPage(1);
+
+  adjustTableToFit();
 });
 
 document.querySelector('.monthly-button').addEventListener('click', function() {
   // Remove 'active' class from weekly button and add it to the monthly button
   document.querySelector('.weekly-button').classList.remove('active');
+  document.querySelector('.daily-button').classList.remove('active');
   this.classList.add('active');
 
   // Call function to generate month buttons
   generateMonthButtons();
-
+  resetPagination();
   // Get the current month
   const currentMonth = getCurrentMonth(new Date());
 
   // Call function to filter data by the current month
   filterByMonthNumber(currentMonth);
+  adjustTableToFit();
 });
-
 

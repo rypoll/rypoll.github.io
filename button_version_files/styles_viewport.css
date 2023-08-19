@@ -1,0 +1,479 @@
+:root {
+  --light-grey: #d3d3d3; /* Define a variable for the light grey color */
+}
+
+body, .main-container {
+  display: flex;
+  flex-direction: column; /* Ensure content stacks vertically */
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+  background-color: #202123;
+  color: var(--light-grey);
+  justify-content: flex-start; /* start content at the top */
+  margin: 0;
+  width: 100%;
+}
+
+
+/* .main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+  background-color: #202123;
+  color: var(--light-grey);
+  justify-content: flex-start;
+  width:100%;
+} */
+
+
+.title {
+  font-family: 'Courier New', monospace;
+  font-size: 5vw; /* 72px -> 7.03125vw */
+  color: white;
+  text-align: center;
+  margin-top: 1.953125vw; /* 20px -> 1.953125vw */
+
+  
+}
+
+
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.953125vw 4.8828125vw; /* 20px -> 1.953125vw, 50px -> 4.8828125vw */
+  border-radius: 0.78125vw; /* 8px -> 0.78125vw */
+  margin-top: 1.953125vw;
+  width: 87.890625vw; /* 900px -> 87.890625vw */
+}
+
+.header {
+  position: absolute;
+  top: 0px; /* adjust as necessary */
+  left: 50%; 
+  transform: translateX(-50%); /* centers the header horizontally */
+  z-index: 100; /* ensure it's above other content if overlaps happen */
+  width: 78.125vw; /* 800px -> 78.125vw */
+}
+
+
+/* Add a style for the button container */
+.buttons-container {
+
+  position: absolute;
+  top: 12vw; /* 250px -> 24.4140625vw */
+  border-radius: 0.78125vw;
+  padding: 0.390625vw;
+  margin-bottom: 1.953125vw;
+  transform: translateX(-50%);
+  display: flex;
+  background-color: #f0f0f0; /* Set the background color for the buttons container */
+  overflow: hidden; /* Hide any overflow to keep the container visually clean */
+/* Add some space between the buttons container and the table container */
+
+  /*width: 800px;
+  //justify-content: center; */
+}
+
+/* Add styles for the new dynamic buttons container */
+.dynamic-buttons-container {
+  /*position: absolute;*/
+  top: 39.0625vw; /* 400px -> 39.0625vw */
+  /* ... other properties ... */
+  border-radius: 0.78125vw;
+  padding: 0.390625vw;
+  width: 11.71875vw; /* 120px -> 11.71875vw */
+  margin-right: 2.9296875vw; /* 30px -> 2.9296875vw */
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #f0f0f0;
+
+}
+
+
+
+.container-table-and-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 4.8828125vw;
+  border-radius: 0.78125vw;
+  margin-top: 29.296875vw; /* 300px -> 29.296875vw */
+}
+
+#myTable{
+  /* width: 97.65625vw; 1000px -> 97.65625vw */
+  width: 100%;
+}
+
+.dynamic-buttons-container button {
+  width: 100%;  /* Ensures that buttons take the full width of the container */
+}
+
+
+
+
+
+.description {
+  font-size: 1.3vw; /* 16px -> 1.5625vw */
+  margin-bottom: 0.8828125vw;
+  margin-top: -3.00765625vw;
+  color: white;
+  text-align: center;
+}
+
+
+
+.dropdown-container {
+  position: absolute; /* Position the dropdown outside the table container */
+  top: -30px; /* Adjust the top position to move it above the table container */
+  left: 0; /* Align the dropdown with the left of the table container */
+}
+
+.dropdown-container label {
+  font-weight: bold; /* Apply bold font-weight to the label */
+}
+
+.table-container {
+  width: 158.59375vw; /* 600px -> 58.59375vw */
+  /* ... other properties ... */
+  border-radius: 0.78125vw;
+  padding: 0.390625vw;
+  max-height: 48.828125vw; /* 500px -> 48.828125vw */
+  top: 53.7109375vw; /* 550px -> 53.7109375vw */
+  /*max-width: 800px;*/
+  margin: 0 auto;
+  background-color: #f0f0f0; /* White background for the table container */
+  border: 1px solid #ccc; /* Optional: Add a border to the table container */
+
+
+  overflow-x: hidden; /* Hide horizontal overflow */
+  overflow-y: auto;
+
+
+ 
+}
+
+
+
+/* Add styles for the buttons */
+.buttons-container button, .dynamic-buttons-container button, .month-button-container button, .week-button-container button {
+  flex: 1;
+  padding: 0.9765625vw;
+  border: none;
+  background-color: transparent;
+  font-size: 0.625vw;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+  
+}
+
+/* Add a style for the active button */
+.buttons-container button.active {
+  background-color:#77777a; /* Set the background color for the active button */
+  color: #fff; /* Set the text color for the active button */
+  border-radius: 0.78125vw
+}
+
+/* Remove the default focus outline for the buttons on click */
+.buttons-container button:active,
+.buttons-container button:focus {
+  outline: none;
+}
+
+
+.monthly-button:hover,
+.quarterly-button:hover,
+.biannually-button:hover,
+.yearly-button:hover,
+.weekly-button:hover {
+  color:#77777a
+}
+
+/* Add styles for other buttons */
+.weekly-button,
+.monthly-button,
+.quarterly-button,
+.biannually-button,
+.yearly-button {
+  padding: 1.171875vw 1.953125vw; /* 12px 20px -> 1.171875vw 1.953125vw */
+  font-size: 1.5625vw; /* 16px -> 1.5625vw */
+  font-weight: bold;
+  color: #202123;
+  background-color: #77777a; /* Blue background color */
+  border: none;
+  border-radius: 0.208vw;
+  cursor: pointer;
+}
+
+/* Add styles for the active state of other buttons */
+.monthly-button.active,
+.quarterly-button.active,
+.biannually-button.active,
+.yearly-button.active {
+  background-color: #77777a; /* Set the background color for the active button */
+  color: #202123; /* Set the text color for the active button */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 78.125vw; /* 800px -> 78.125vw */
+  height: 4.8828125vw;
+  table-layout: fixed;
+}
+
+td {
+  max-height: 4.8828125vw; /* 50px -> 4.8828125vw */
+  overflow: hidden; /* Hide any content that overflows the cell */
+  text-overflow: ellipsis; /* Add ellipsis (...) to indicate text overflow */
+  white-space: normal; /* Allow text to wrap within the cell */
+}
+
+th,
+td {
+  border: none;
+  padding: 0.78125vw; /* 8px -> 0.78125vw */
+  text-align: left;
+}
+
+td,
+th {
+  overflow: hidden; /* Hide content that overflows the cell */
+  text-overflow: ellipsis; /* Display ellipsis (...) for overflow */
+}
+
+th {
+  background-color: #f0f0f0; /* Eggshell color for the header */
+  color: #202123;
+}
+
+tr:nth-child(even) {
+  background-color: #434654; /* White background for odd rows */
+}
+
+tr:nth-child(odd) {
+  background-color: #333641; /* Eggshell color for even rows */
+}
+
+#pagination {
+  margin-top: 1.95315vw; /* Add margin to create space between the table and pagination */
+  display: flex;
+  justify-content: center; /* Center the pagination numbers horizontally */
+}
+
+#pagination a {
+  color: var(--light-grey);
+  text-decoration: underline; /* Underline to indicate hyperlink */
+  margin-right: 0.9765625vw; /* Add some spacing between the links */
+  font-weight: bold; /* Make the links bold */
+}
+
+a {
+  color: var(--light-grey);
+  text-decoration: underline; /* Underline to indicate hyperlink */
+  font-weight: bold; /* Make the links bold */
+}
+
+#pagination a:last-child {
+  margin-right: 0; /* Remove spacing from the last link */
+}
+
+/* Add styles for specific table headers */
+th:nth-child(1) {
+  width: 69%; /* Set width for the first column */
+}
+
+th:nth-child(2) {
+  width: 25%; /* Set width for the second column */
+}
+
+th:nth-child(3) {
+  width: 6%; /* Set width for the third column */
+}
+
+/* Style the links in the second column */
+td:nth-child(2) a {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+tr {
+  height: 2.44140625vw; /* 25px -> 2.44140625vw */
+}
+
+table.inner-table tr {
+  background-color: transparent; /* Set background to transparent for Table B rows */
+}
+
+/* Add this CSS for the 3x3 table */
+table.inner-table {
+  font-size: 0.729vw;
+  border-collapse: collapse;
+  width: 14.6484375vw; /* 150px -> 14.6484375vw */
+  table-layout: fixed;
+}
+
+table.inner-table li {
+  list-style-type: disc;
+  margin-left: 0.1953vw;
+  line-height: 1.1;
+}
+
+/* Add this CSS to remove bullet points for the inner-table */
+table.inner-table ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Add this CSS to align the link text properly */
+table.inner-table a {
+  padding-left: 0.0977vw;
+  display: inline;
+}
+
+/* Add this CSS to prevent text from wrapping and show ellipses (...) if it overflows */
+.inner-table td {
+  max-width: 14.6484375vw; /* 150px -> 14.6484375vw */
+  width: 8.7890625;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0.2929vw;
+}
+.month-button-container,
+.week-button-container {
+  display: flex;
+  background-color: #f0f0f0; /* Set the background color for the buttons container */
+  border-radius: 0.7813vw; /* Add rounded corners for the buttons container */
+  overflow: hidden; /* Hide any overflow to keep the container visually clean */
+  margin-bottom: 0px; /* Add some space between the buttons container and the table container */
+  padding:  0.3906vw;
+  font-size:1.3672vw;
+  position:relative;
+  text-align: center;
+  flex-grow: 5;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+
+
+  
+}
+
+
+
+
+
+.arrow-button {
+  flex-shrink: 0; /* Prevent the button from shrinking */
+  /* ... your other styles ... */
+}
+
+.arrow-container {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* For the left arrow, use 'flex-start'. For the right arrow, use 'flex-end'. */
+}
+
+.arrow-button-container:first-child {
+  left: 0;
+}
+
+.arrow-button-container:last-child {
+  right: 0;
+}
+
+
+/* Add styles for the week number buttons */
+.month-button-container button,
+.week-button-container button {
+  display:grid;
+  flex:1;
+  padding: 0.9766vw;
+  border: none;
+  background-color: transparent;
+  font-size: 1.1719vw;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;/* Set the default background color for the week number buttons */
+  
+  border-radius: 0;
+  white-space: nowrap;
+
+
+
+
+}
+
+
+
+
+
+
+/* Add styles for the active state of week number buttons */
+.month-button-container button.active,
+.week-button-container button.active{
+  background-color:#777a77; /* Set the background color for the active button */
+  color: #fff; /* Set the text color for the active button */
+  border-radius: 0.7813vw;
+}
+
+.week-container button:active,
+.week-container button:focus {
+  outline: none;
+}
+
+/* Add styles for the buttons */
+.month-button,
+.week-button {
+  padding: 1.1719vw 1.9531vw;
+  font-size: 1.171875vw; /* 12px -> 1.171875vw */
+  font-weight: bold;
+  color: #202123;
+  background-color: #77777a;
+  border: none;
+  border-radius: 0.78125vw; /* 8px -> 0.78125vw */
+  cursor: pointer;
+
+}
+
+/* Add styles for the active state of the week buttons */
+.month-button.active,
+.week-button.active {
+  background-color: #77777a !important; /* Set the background color for the active week button */
+  color: #fff; /* Set the text color for the active week button */
+}
+
+.month-button:hover,
+.week-button:hover {
+  color:#77777a
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+
+button.invisible {
+  visibility: hidden;
+}
+
+
+

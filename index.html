@@ -1,62 +1,47 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>No B.S. AI News</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No B.S A.I News</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
-
 <body>
-    <div class="main-container">
-        <!-- Container 1 -->
-        <div class="container container-1">
-            Logo
-        </div>
-        <!-- Container 2 -->
-        <div class="container container-2">
-          <div class="header">
-            <h1 class="title">No B.S. AI News</h1>
-            <p class="description">Weekly summary of the most popular AI News stories.</p>
-          </div>
+    <!-- Title Container -->
+    <div class="container title-container">
+        <h1>No B.S A.I News</h1>
 
-        </div>
-        <!-- Container 3 -->
-        <div class="container container-3">
-            <div class="buttons-container">
-                <div class="weekly-button-container">
-                    <button class="period-button weekly-button active">Weekly</button>
-                </div>
-                <div class="monthly-button-container">
-                    <button class="period-button monthly-button">Monthly</button>
-                </div>
-            </div>
-            <div class="dynamic-buttons-container">
-                <!-- Buttons will be added here -->
-            </div>
-        </div>
-        <!-- Container 4 -->
-        <div class="container container-4">
-
-            <div class="table-container-w-pagination">
-                <div class="table-container">
-                    <table id="myTable">
-                        <!-- Column headers -->
-                        <tr>
-                            <th style="width: 50%;">Description</th>
-                            <th style="width: 25%;">Links</th>
-                            <th style="width: 25%;">Popularity</th>
-                        </tr>
-                    </table>
-                </div>
-                <div id="pagination"></div>
-            </div>
+        <!-- Filter Container -->
+        <div class="filter-container">
+            <!-- "Filter By:" is automatically added by the ::before pseudo-element in the CSS -->
+            <select id="dropdown1">
+                <option selected>Daily</option>
+                <option>Weekly</option>
+                <option>Monthly</option>
+            </select>
+            <select id="dropdown2">
+                <option>Drop down 2</option>
+            </select>
+            <select id="dropdown3">
+                <option>AI in Business</option>
+                <option>AI Marketing Tools</option>
+                <option>AI News</option>
+                <option>AI Real-World Applications</option>
+                <option>Making Money With AI</option>
+                <option>New Tech and AI tools</option>
+                <option>No code AI Use Cases</option>
+                <option>Writing Prompts for Chatbot Assistants</option>
+            </select>
         </div>
     </div>
 
-    <script src="script0_week_number_script.js"></script>
-    <script src="script1_month_number_script.js"></script>
-    <script src="script99.js"></script>
-</body>
+    <!-- Table Container -->
+    <div class="container table-container">
+        <table id="data-table"></table>
+        <div id="pagination"></div>
+    </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>

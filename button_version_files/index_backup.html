@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>No B.S. AI News</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+<div class="main-container">
+  <div class="container">
+    <div class="header">
+      <h1 class="title">No B.S. AI News</h1>
+      <p class="description">Weekly summary of the most popular AI News stories.</p>
+    </div>
+
+    
+    <div class="buttons-container">
+      <div class="weekly-button-container">
+        <button class="period-button weekly-button active">Weekly</button>
+      </div>
+      <div class="monthly-button-container">
+        <button class="period-button monthly-button">Monthly</button>
+      </div>
+    </div>
+
+    <!-- New container for dynamic buttons -->
+
+  </div>
+  <div class="container-table-and-buttons">
+    <div class="dynamic-buttons-container">
+      <!-- Buttons will be added here -->
+    </div>
+    <div class="table-container-w-pagination">
+      <div class="table-container">
+        <table id="myTable">
+          <!-- Column headers -->
+          <tr>
+            <th style="width: 50%;">Description</th>
+            <th style="width: 25%;">Links</th>
+            <th style="width: 25%;">Popularity</th>
+          </tr>
+        </table>
+      </div>
+      <div id="pagination"></div>
+    </div>
+
+
+    
+  </div>
+</div>
+
+  <script src="script0_week_number_script.js"></script>
+  <script src="script1_month_number_script.js"></script>
+  <script src="script99.js"></script>
+  
+</body>
+</html>

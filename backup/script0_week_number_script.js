@@ -1,3 +1,55 @@
+document.addEventListener('DOMContentLoaded', function () {
+  adjustTableToFit();
+  window.addEventListener('resize', adjustTableToFit);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  adjustTableToFit();
+  window.addEventListener('resize', adjustTableToFit);
+});
+
+function adjustTableToFit() {
+  const tableContainer = document.querySelector('.table-container');
+  const table = document.querySelector('.table-container table');
+  const container4 = document.querySelector('.container-4');
+  const paginationHeight = document.getElementById('pagination').offsetHeight;
+
+  if (!tableContainer || !container4 || !table) return;
+
+  const containerHeight = container4.clientHeight - paginationHeight;
+  const containerWidth = container4.clientWidth;
+
+  // Set widths to ensure tableContainer and table take up full width of container4
+  tableContainer.style.width = `${containerWidth}px`;
+  table.style.minWidth = `${containerWidth}px`;  // We're using minWidth to override any intrinsic table width.
+
+  // Set height of the tableContainer to match container-4 height
+  tableContainer.style.height = `${containerHeight}px`;
+
+  if (table.scrollHeight > containerHeight) {
+      let scaleFactor = containerHeight / table.scrollHeight;
+      tableContainer.style.transform = `scale(${scaleFactor})`;
+      tableContainer.style.transformOrigin = "left top";
+  } else {
+      tableContainer.style.transform = 'scale(1)';
+  }
+}
+
+
+function resetPagination() {
+  currentPage = 1;
+  currentStartPage = 1;
+  const numPages = Math.ceil(data.length / rowsPerPage); // Assuming data is your dataset; adjust if otherwise
+  populatePagination(numPages);
+}
+
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}
+
+
+
+
 function getWeekNumber(d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -29,6 +81,7 @@ function filterByWeekNumber(weekNumber) {
       button.classList.add('active');
     }
   });
+  adjustTableToFit();
 }
   
 
@@ -54,14 +107,12 @@ function generateWeekButtonsInRange(startingWeek, endingWeek) {
   const minWeekNumber = Math.min(...weekNumbers);
   let buttonsHTML = "";
 
-  if (startingWeek > minWeekNumber) {
-    buttonsHTML += `<div class="week-button-container">
-                        <button class="arrow-button" onclick="showPreviousWeeks(${startingWeek - 1})">↑</button>
-                    </div>`;
-  }
+  const downArrowClass = startingWeek > minWeekNumber ? '' : 'disabled';
+  buttonsHTML += `<div class="week-button-container">
+                      <button class="arrow-button ${downArrowClass}" onclick="showPreviousWeeks(${startingWeek - 1})">↓</button>
+                  </div>`;
 
   for (let i = startingWeek; i <= endingWeek; i++) {
-    // Check if the week number has a corresponding label in weekLabels
     if (weekLabels[i]) {
       buttonsHTML += `<div class="week-button-container">
                         <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
@@ -69,12 +120,14 @@ function generateWeekButtonsInRange(startingWeek, endingWeek) {
     }
   }
 
+  const upArrowClass = endingWeek >= currentWeek ? 'disabled' : '';
   buttonsHTML += `<div class="week-button-container">
-                      <button class="arrow-button ${endingWeek >= maxWeekNumber ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + 1})">↓</button>
+                      <button class="arrow-button ${upArrowClass}" onclick="showNextWeeks(${startingWeek + 1})">↑</button>
                   </div>`;
 
   dynamicButtonsContainer.innerHTML = buttonsHTML;
 }
+
 
 
 
@@ -110,29 +163,9 @@ function generateWeekButtons() {
   const numWeeksToShow = Math.min(5, maxWeekNumber - minWeekNumber + 1);
   let startingWeek = Math.max(minWeekNumber, currentWeek - numWeeksToShow + 1);
 
-  let buttonsHTML = "";
-
-  if (startingWeek > minWeekNumber) {
-    buttonsHTML += `<div class="week-button-container">
-                        <button class="arrow-button" onclick="showPreviousWeeks(${startingWeek - 1})">↑</button>
-                    </div>`;
-  }
-
-  for (let i = startingWeek; i <= startingWeek + numWeeksToShow - 1; i++) {
-    // Check if the week number has a corresponding label in weekLabels
-    if (weekLabels[i]) {
-      buttonsHTML += `<div class="week-button-container">
-                        <button class="week-button ${i === currentWeek ? 'active' : ''}" data-week="${i}" onclick="filterByWeekNumber(${i})">${getWeekLabel(i, new Date().getFullYear())}</button>
-                    </div>`;
-    }
-  }
-
-  buttonsHTML += `<div class="week-button-container">
-                      <button class="arrow-button ${currentWeek >= maxWeekNumber ? 'invisible' : ''}" onclick="showNextWeeks(${startingWeek + numWeeksToShow})">↓</button>
-                  </div>`;
-
-  dynamicButtonsContainer.innerHTML = buttonsHTML;
+  generateWeekButtonsInRange(startingWeek, startingWeek + numWeeksToShow - 1);
 }
+
 
 
 
