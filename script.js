@@ -2,19 +2,29 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentPage = 1;
     const rowsPerPage = 20; // Each row in your CSV results in 5 rows in the table, so this essentially gets 4 original CSV rows per page
     let allData = [];
-
+    let filteredData = [];  // Declare it here
+    function sortByBacklinks(a, b) {
+        return b["L"] - a["L"]; // This sorts in descending order
+    }
+    
     // Use PapaParse to read and process the CSV data
     Papa.parse('02a-summarised-w-seo-csv.csv', {
         download: true,
         header: true,
         complete: function(results) {
-            allData = results.data;
-            populateTable(allData, 0);  // Start from the first row initially
-            generatePagination(allData.length);
+            allData = results.data.filter(r => r && r['Topic summary'] && r['Topic summary'].trim() !== '');
+            filteredData = allData; // Set filteredData to allData initially
+            filteredData.sort(sortByBacklinks); // Sorting the initial data
+            populateTable(filteredData, 0);
+            generatePagination(filteredData.length);
+            
+            filterDataByDate();  // This will update the filteredData according to today's date
         }
     });
 
+
     function formatDate(cellDateStr) {
+        if (!cellDateStr) return "Invalid Date"; 
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Resetting the time part, considering only the date part
     
@@ -33,20 +43,34 @@ document.addEventListener("DOMContentLoaded", function() {
             return `${months} mo. ago`;
         }
     }
-    
+    function setInnerRowPadding(tdElement) {
+        tdElement.style.padding = "7px";  // You can adjust the value of padding as per your requirements
+    }
+
     function populateTable(data, start) {
         let table = document.getElementById('data-table');
         table.innerHTML = ""; // clear previous content
     
         let slicedData = data.slice(start, start + rowsPerPage);
     
-        slicedData.forEach(row => {
+        slicedData.forEach((row, rowIndex) => {
+                    // Add the border to the last 'tr' of each group (i.e., the 'tr' for 'L' / SEO Stats in your example)
+
+            // Add above space
+
+            let trSpacer1 = document.createElement('tr');
+            let tdSpacer1 = document.createElement('td');
+            tdSpacer1.style.height = "10px";  // Adjust this value as needed
+
+            trSpacer1.appendChild(tdSpacer1);
+            table.appendChild(trSpacer1);
             // Format the date
             let formattedDate = formatDate(row.Date);
             
             // Create row for 'Date'
             let trDate = document.createElement('tr');
             let td = document.createElement('td');
+            setInnerRowPadding(td);
             td.classList.add('date-formatted');
             td.textContent = formattedDate;
             trDate.appendChild(td);
@@ -54,50 +78,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Create row for 'Topic summary'
             let trTopicSummary = document.createElement('tr');
-            trTopicSummary.innerHTML = `<td>${row['Topic summary']}</td>`;
+            let tdTopic = document.createElement('td');
+            tdTopic.innerHTML = row['Topic summary'];
+            setInnerRowPadding(tdTopic);  // Apply the padding function
+            trTopicSummary.appendChild(tdTopic);
             table.appendChild(trTopicSummary);
-
-
-
-            // Create row for 'Category'
-            let trCategory = document.createElement('tr');
-            let tdCategory = document.createElement('td');
-            let categories = row.Category.slice(1, -1).split(',').map(item => item.trim().slice(1, -1));
-
-            console.log(row.Category, typeof row.Category);
-
-            // Loop through the category array and format each category
-            categories.forEach(cat => {
-                let span = document.createElement('span');
-                
-                // Convert and format category for class name
-                let className = cat.toLowerCase().replace(/ /g, '-');
-                span.className = `category ${className}`;
-                
-                // Capitalize each word for display, with a special case for 'AI'
-                let displayCat = cat.split(' ').map(word => {
-                    if (word.toLowerCase() === 'ai') {
-                        return 'AI';  // Special case for the word 'AI'
-                    }
-                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-                }).join(' ');
             
-                // Set the text content
-                span.textContent = displayCat;
-                
-                // Append to the table cell
-                tdCategory.appendChild(span);
-            });
-
-            trCategory.appendChild(tdCategory);
-            table.appendChild(trCategory);
-
-
-
 
             // Create row for 'Associated Links'
             let trLinks = document.createElement('tr');
             let tdLinks = document.createElement('td');
+            setInnerRowPadding(tdLinks);
+            tdLinks.style.paddingLeft = "0";  
+            
 
             // Parse the string array
             let links;
@@ -123,8 +116,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     linkElement.textContent = `${index + 1}. ${capitalizedPart}`;
 
                     // Style the link
-                    linkElement.style.fontSize = '12px';         // Small font size
-                    linkElement.style.color = '#61747a';              // Default text color
+                    linkElement.style.fontSize = '10px';         // Small font size
+                    linkElement.style.color = '#6767bf';              // Default text color
                     linkElement.style.padding = '5px 10px';      // Some padding
                     linkElement.style.borderRadius = '20px';     // Rounded corners
                     linkElement.style.marginRight = '10px';      // Some spacing between links if there are multiple
@@ -139,49 +132,130 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+
+
+            // Create row for 'Category'
+            let trCategory = document.createElement('tr');
+            let tdCategory = document.createElement('td');
+            setInnerRowPadding(tdCategory);
+            let categories = row.Category.slice(1, -1).split(',').map(item => item.trim().slice(1, -1));
+
+            console.log(row.Category, typeof row.Category);
+
+            // Loop through the category array and format each category
+            categories.forEach(cat => {
+                let span = document.createElement('span');
+                
+                // Convert and format category for class name
+                let className = cat.toLowerCase().replace(/ /g, '-');
+                span.className = `category ${className}`;
+                
+                // Capitalize each word for display, with a special case for 'AI'
+                let displayCat = cat.split(/[\s-]/).map(word => {   // Split on spaces or hyphens
+                    if (word.toLowerCase() === 'ai') {
+                        return 'AI';  // Special case for the word 'AI'
+                    }
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                }).join(' ').replace(/ - /g, '-');  // Rejoin with spaces, then replace spaced hyphens with just hyphens
+                
+                // Set the text content
+                span.textContent = displayCat;
+                
+                // Append to the table cell
+                tdCategory.appendChild(span);
+            });
+
+            trCategory.appendChild(tdCategory);
+            table.appendChild(trCategory);
+
+
+
+
+
+
+
             // Create row for 'L'
             let trSeoStats = document.createElement('tr');
             let tdSeoStats = document.createElement('td');
+            setInnerRowPadding(tdSeoStats);
+            
 
             // Format the number from 'L'
             let formattedNumber;
-            if (row.L < 1000) {
+            if (!row.L && row.L !== 0) {
+                formattedNumber = 'N/A';
+                
+                // Log the row to console to inspect its data
+                console.log('Row with N/A value for L:', row);
+                
+            } else if (row.L < 1000) {
                 formattedNumber = row.L;
             } else if (row.L >= 1000 && row.L < 10000) {
                 formattedNumber = `${(row.L / 1000).toFixed(1)}K`;
-            } else {
+            } else if (row.L >= 10000 && row.L < 1000000) {
                 formattedNumber = `${Math.round(row.L / 1000)}K`;
+            } else if (row.L >= 1000000 && row.L < 10000000) {
+                formattedNumber = `${(row.L / 1000000).toFixed(1)}M`;
+            } else {
+                formattedNumber = `${Math.round(row.L / 1000000)}M`;
             }
+            
 
-            // Span for the formatted number with styling
+            // Combined span for the link icon and the formatted number with shared background
+            let combinedSpan = document.createElement('span');
+            combinedSpan.style.background = "#1a282d";
+            combinedSpan.style.padding = "8px 10px";
+            combinedSpan.style.borderRadius = "20px";
+            combinedSpan.style.color = "white";
+            combinedSpan.style.lineHeight = "2.5";
+
+            let linkIcon = document.createTextNode('🔗');  // Using a text node to keep them together
+            combinedSpan.appendChild(linkIcon);
+
             let spanNumber = document.createElement('span');
             spanNumber.textContent = formattedNumber;
-            spanNumber.style.background = "#1a282d";
-            spanNumber.style.padding = "5px 10px";
-            spanNumber.style.borderRadius = "20px";
-            spanNumber.style.color = "white";
+            combinedSpan.appendChild(spanNumber);
 
-            // Create the "Backlinks:" text and the "i" information icon
-            let infoIcon = "ℹ️";  // Unicode for information symbol with a circle around it.
-            let spanIcon = document.createElement('span');
-            spanIcon.textContent = infoIcon;
-            spanIcon.title = "Backlinks are incoming links to a webpage. They serve as a proxy for content quality and popularity in SEO metrics.";  // The tooltip
-            tdSeoStats.appendChild(spanIcon);
+            // Tooltip for the combined span
+            combinedSpan.title = "Backlinks are incoming links to a webpage. They serve as a proxy for content quality and popularity in SEO metrics.";
 
-            let backlinkText = document.createTextNode(" Backlinks:");
-            tdSeoStats.appendChild(backlinkText);
-            // Append everything to the table cell
-            tdSeoStats.appendChild(backlinkText);
-            tdSeoStats.appendChild(spanIcon);
-            tdSeoStats.appendChild(spanNumber);
-            tdSeoStats.style.fontSize = "12px";  // Setting the font size
+            // Appending elements to the tdSeoStats
+            tdSeoStats.appendChild(combinedSpan);
+            tdSeoStats.style.fontSize = "11px";  // Setting the font size
+            tdSeoStats.style.fontWeight = "bold";
+
+
+
+
 
             // Append the table cell to the row, and then append the row to the table
             trSeoStats.appendChild(tdSeoStats);
             table.appendChild(trSeoStats);
 
+            let trSpacer = document.createElement('tr');
+            let tdSpacer = document.createElement('td');
+            tdSpacer.style.height = "10px";  // Adjust this value as needed
+            tdSpacer.style.borderBottom = "1px solid rgb(50, 50, 50)"; // Replace '#yourBorderColorHere' with the desired color
+
+            trSpacer.appendChild(tdSpacer);
+            table.appendChild(trSpacer);
+
+
 
         });
+    }
+
+        function extractMonthYearFromDate(dateString) {
+        const [day, month, year] = dateString.split("/");
+        return `${month}/${year}`;
+    }
+    
+    function filterDataByMonth(monthIndex) {
+        // Convert the monthIndex to a string format like "01/2023"
+        const monthString = (`0${monthIndex}`).slice(-2) + "/2023";
+    
+        // Filter the data by the selected month
+        return filteredData.filter(row => extractMonthYearFromDate(row.Date) === monthString); // return the filtered data
     }
 
     function generatePagination(totalLength) {
@@ -195,8 +269,8 @@ document.addEventListener("DOMContentLoaded", function() {
             pageBtn.textContent = i;
             pageBtn.onclick = function() {
                 currentPage = i;
-                populateTable(allData, (i-1) * rowsPerPage);
-                generatePagination(totalLength); // Recreate pagination so the clicked page gets "active" class
+                populateTable(filteredData, (i-1) * rowsPerPage);
+                generatePagination(filteredData.length);
             };
 
             if (currentPage === i) {
@@ -211,30 +285,71 @@ document.addEventListener("DOMContentLoaded", function() {
     //Start dropdown stuff
     const dropdown1 = document.getElementById('dropdown1');
     const dropdown2 = document.getElementById('dropdown2');
+    const dropdown3 = document.getElementById('dropdown3');
     
     updateDropdown2();
+    dropdown2.addEventListener('change', filterDataByDate);
+    dropdown3.addEventListener('change', filterDataByDate);
+    function filterDataByDate() {
+        filteredData = [...allData]; // Start with all the data. Using spread syntax to ensure we get a new array
+        
+    
+        // Check if we're in the 'Daily' mode
+        if (dropdown1.value === 'Daily') {
+            const selectedDate = new Date(dropdown2.value);
+            const formattedDate = `${('0' + selectedDate.getDate()).slice(-2)}/${('0' + (selectedDate.getMonth() + 1)).slice(-2)}/${selectedDate.getFullYear()}`;
+            filteredData = filteredData.filter(row => row.Date === formattedDate);
+        } else if (dropdown1.value === 'Weekly') {
+            const selectedWeekStartDate = dropdown2.value;
+            filteredData = filteredData.filter(row => row.wc_date === selectedWeekStartDate);
+        } else if (dropdown1.value === 'Monthly') {
+            filteredData = filterDataByMonth(dropdown2.value);
+        }
+    
+        if (dropdown3.value !== "All Categories") {
+            const normalizedDropdownValue = dropdown3.value.toLowerCase().replace(/-/g, ' ');
+            filteredData = filteredData.filter(row => {
+                const categories = row.Category.slice(1, -1).split(',').map(item => 
+                    item.trim().slice(1, -1).toLowerCase().replace(/-/g, ' ')
+                );
+                return categories.includes(normalizedDropdownValue);
+            });
+        }
+        filteredData.sort(sortByBacklinks);
+        populateTable(filteredData, 0);
+        generatePagination(filteredData.length);
+    }
 
+
+
+
+    
     dropdown1.addEventListener('change', updateDropdown2);
 
     function updateDropdown2() {
+        
         dropdown2.innerHTML = ''; // Clear previous options
         switch (dropdown1.value) {
             case "Daily":
                 populateDaily();
+                
+                // After populating daily options, filter the data by the default (current) date.
+                filterDataByDate();
                 break;
             case "Weekly":
-                // Assuming you're using PapaParse, you'll need to fetch and parse the CSV to get the "wc_date" values.
-                // This is a stub until you have the actual CSV parsing in place.
                 populateWeekly();
+                filterDataByDate();
                 break;
             case "Monthly":
                 populateMonthly();
+                filterDataByDate();
                 break;
         }
     }
 
     function populateDaily() {
-        let today = new Date(2023, 7, 19); // Example date
+        let today = new Date();
+        today.setHours(0, 0, 0, 0); // Remove time for accurate comparisons
         let startDate = new Date(2023, 3, 1); 
         while(today >= startDate) {
             let option = new Option(`${today.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, today.toISOString());
@@ -275,13 +390,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function populateMonthly() {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        let today = new Date(2023, 7, 19); // Example date
+        let today = new Date();
         let month = today.getMonth();
         while (month >= 0) {
             dropdown2.add(new Option(`${months[month]} 2023`, month + 1));
             month--;
         }
     }
+
+
+
+
+
+    
+
+
+    
 
     
 });
