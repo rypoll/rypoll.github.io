@@ -45,7 +45,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     function setInnerRowPadding(tdElement) {
         tdElement.style.padding = "7px";  // You can adjust the value of padding as per your requirements
+        tdElement.style.paddingLeft = "15px";   // Set the left padding
+        tdElement.style.paddingRight = "15px";  // Set the right padding
     }
+
+
 
     function populateTable(data, start) {
         let table = document.getElementById('data-table');
@@ -54,7 +58,14 @@ document.addEventListener("DOMContentLoaded", function() {
         let slicedData = data.slice(start, start + rowsPerPage);
     
         slicedData.forEach((row, rowIndex) => {
-                    // Add the border to the last 'tr' of each group (i.e., the 'tr' for 'L' / SEO Stats in your example)
+                    // Create a tbody for each 'X'
+            let tbody = document.createElement('tbody');
+            setInnerRowPadding(tbody)
+            tbody.style.border = "0px solid #000";  // Give it a border
+            tbody.style.background = "#38333e";
+             // Set background color to white
+
+             // Add the border to the last 'tr' of each group (i.e., the 'tr' for 'L' / SEO Stats in your example)
 
             // Add above space
 
@@ -70,9 +81,12 @@ document.addEventListener("DOMContentLoaded", function() {
             // Create row for 'Date'
             let trDate = document.createElement('tr');
             let td = document.createElement('td');
+            
             setInnerRowPadding(td);
             td.classList.add('date-formatted');
             td.textContent = formattedDate;
+            td.style.paddingTop = "20px";
+            
             trDate.appendChild(td);
             table.appendChild(trDate);
 
@@ -89,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let trLinks = document.createElement('tr');
             let tdLinks = document.createElement('td');
             setInnerRowPadding(tdLinks);
-            tdLinks.style.paddingLeft = "0";  
+            // tdLinks.style.paddingLeft = "0";  
             
 
             // Parse the string array
@@ -118,9 +132,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Style the link
                     linkElement.style.fontSize = '10px';         // Small font size
                     linkElement.style.color = '#6767bf';              // Default text color
-                    linkElement.style.padding = '5px 10px';      // Some padding
+                    linkElement.style.padding = '5px 0px';      // Some padding
+                    linkElement.style.paddingRight = "15px";
                     linkElement.style.borderRadius = '20px';     // Rounded corners
-                    linkElement.style.marginRight = '10px';      // Some spacing between links if there are multiple
+                    linkElement.style.marginRight = '0px';      // Some spacing between links if there are multiple
 
                     // Append the link to the td
                     tdLinks.appendChild(linkElement);
@@ -203,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Combined span for the link icon and the formatted number with shared background
             let combinedSpan = document.createElement('span');
-            combinedSpan.style.background = "#1a282d";
+            combinedSpan.style.background = "#5f5179";
             combinedSpan.style.padding = "8px 10px";
             combinedSpan.style.borderRadius = "20px";
             combinedSpan.style.color = "white";
@@ -223,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function() {
             tdSeoStats.appendChild(combinedSpan);
             tdSeoStats.style.fontSize = "11px";  // Setting the font size
             tdSeoStats.style.fontWeight = "bold";
+            tdSeoStats.style.paddingBottom = "20px";
 
 
 
@@ -232,11 +248,23 @@ document.addEventListener("DOMContentLoaded", function() {
             trSeoStats.appendChild(tdSeoStats);
             table.appendChild(trSeoStats);
 
+            
+            tbody.appendChild(trDate);
+            tbody.appendChild(trTopicSummary);
+            tbody.appendChild(trLinks);
+            tbody.appendChild(trCategory);
+            tbody.appendChild(trSeoStats);
+            
+            table.appendChild(tbody);
+    
+            // Spacer is outside of the tbody
             let trSpacer = document.createElement('tr');
             let tdSpacer = document.createElement('td');
             tdSpacer.style.height = "10px";  // Adjust this value as needed
-            tdSpacer.style.borderBottom = "1px solid rgb(50, 50, 50)"; // Replace '#yourBorderColorHere' with the desired color
+            tdSpacer.style.borderBottom = "1px solid rgb(50, 50, 50)"; // Spacer's border color
+            tdSpacer.style.backgroundColor = "transparent"; // Make sure it's transparent
 
+            
             trSpacer.appendChild(tdSpacer);
             table.appendChild(trSpacer);
 

@@ -1,5 +1,5 @@
 body, html {
-  background-color: #0b1416;
+  background-color: #2c2537;
   font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
   color: #f0f0f0;
   margin: 0;
@@ -20,6 +20,14 @@ body, html {
   margin-right: 5%; /* Added percentage-based right margin */
   width: 80%; /* Reduced width from 90% to 80% to make it smaller */
 }
+
+#site-logo {
+  width: 70%; /* This will make the image take up 50% of its container's width */
+  /* height will adjust automatically to maintain aspect ratio unless you specify it */
+  padding-left: 50px;
+  
+}
+
 
 
 
@@ -75,12 +83,15 @@ body, html {
   
 
 
-  align-items: center;
+  align-items: left;
   flex-direction: column; /* Changes from column to row so items are side by side */
-  align-items: center; /* Vertically centers the title and filter */
+  align-items: left; /* Vertically centers the title and filter */
   justify-content: space-between; /* Spreads out the title and filter */
   margin: 0 auto;
-  padding-bottom: 5%;
+  padding-bottom: 1%;
+  
+  
+  
 
 
 }
@@ -89,9 +100,10 @@ body, html {
   font-family: 'Inter', monospace;
   font-size: 40px;
   color: white;
-  text-align: center;
+  text-align: left;
   margin: 0;
   margin-bottom: 1%;
+
   
 }
 
@@ -143,7 +155,7 @@ table td, table th {
 select {
   width: auto; /* adjusted based on your requirements */
   padding: 10px;
-  background-color: #0b1416; /* changed to match the website background */
+  background-color: #2c2537; /* changed to match the website background */
   border: none; /* removed border */
   color: #61747a;
   font-size: 12px;
@@ -187,10 +199,10 @@ select:focus {
 
 /* Attempt to style the options */
 #dropdown2 option, #dropdown1 option, #dropdown3 option {
-  background-color: #0f1a1c; /* For example, a light gray background */
+  background-color: #2c2537; /* For example, a light gray background */
   color: #61747a; /* Dark text color */
   border-style: none;
-  border-color: #0b1416;
+  border-color: #2c2537;
   font-size: 14px; /* Make text bigger */
   line-height: 5;  /* Increase the height of each option */
   padding: 5px 10px; /* Add some padding for even more height and comfort */
@@ -233,7 +245,7 @@ select:focus {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 20px;            /* 1. Border radius */
-  background-color: #1a282d;     /* 2. Background color */
+  background-color: #5f5179;     /* 2. Background color */
   border: none;                  /* 5. No border color */
   color: white;                  /* 6. Font color */
   font-weight: bold;             /* 6. Font bold */
@@ -241,11 +253,12 @@ select:focus {
 }
 
 #pagination button.active {
-  background-color: rgba(92, 106, 111, 0.8);   /* 3. Slightly lighter background color */
+  background-color: #9980c4;
+  color: black;   /* 3. Slightly lighter background color */
 }
 
 #pagination button:hover {
-  background-color: rgba(58, 64, 66, 0.9);   /* 4. Slightly lighter background color on hover, but not as light as the active state */
+  background-color: #816ea4;   /* 4. Slightly lighter background color on hover, but not as light as the active state */
 }
 
 
@@ -288,3 +301,23 @@ select:focus {
   margin: 0;
   padding: 0;
 }
+
+
+
+
+/* CSS */
+tbody {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+tbody tr:first-child td {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+tbody tr:last-child td {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
