@@ -24,7 +24,7 @@ body, html {
 #site-logo {
   width: 70%; /* This will make the image take up 50% of its container's width */
   /* height will adjust automatically to maintain aspect ratio unless you specify it */
-  padding-left: 50px;
+  /* padding-left: 50px; */
   
 }
 
@@ -83,12 +83,12 @@ body, html {
   
 
 
-  align-items: left;
+  align-items: center;
   flex-direction: column; /* Changes from column to row so items are side by side */
-  align-items: left; /* Vertically centers the title and filter */
+  align-items: center; /* Vertically centers the title and filter */
   justify-content: space-between; /* Spreads out the title and filter */
   margin: 0 auto;
-  padding-bottom: 1%;
+  padding-bottom: 3%;
   
   
   
