@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log('Row with N/A value for L:', row);
                 
             } else if (row.L < 1000) {
-                formattedNumber = row.L;
+                formattedNumber = parseInt(row.L);
             } else if (row.L >= 1000 && row.L < 10000) {
                 formattedNumber = `${(row.L / 1000).toFixed(1)}K`;
             } else if (row.L >= 10000 && row.L < 1000000) {
