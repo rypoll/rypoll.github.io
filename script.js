@@ -23,19 +23,44 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
-    function formatDate(cellDateStr) {
-        if (!cellDateStr) return "Invalid Date"; 
+    function formatDate(cellDateStr, cellDateTimeStr) {
+        if (!cellDateStr || !cellDateTimeStr) return "Invalid Date"; 
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Resetting the time part, considering only the date part
     
-        const [day, month, year] = cellDateStr.split("/");
-        const cellDate = new Date(year, month - 1, day);
+        const msInAMinute = 60 * 1000;
+        const msInAnHour = 60 * msInAMinute;
+        const msInADay = 24 * msInAnHour;
     
-        const msInADay = 24 * 60 * 60 * 1000;
+        const [day, month, year] = cellDateStr.split("/");
+        
+        const [datePart, timePart] = cellDateTimeStr.split(' ');
+        const [hour, minute, second] = timePart.split(':').map(Number);
+            
+        // Construct the full date-time object
+        const cellDateTime = new Date(year, month - 1, day, hour, minute, second);
+        const currentTime = new Date();
+    
+        const minutesDifference = (currentTime - cellDateTime) / msInAMinute;
+        
+        if (minutesDifference <= 60) {
+            if (minutesDifference <= 1) {
+                return "Just now"; // Optional: If it's less than a minute, you might want to say "Just now"
+            }
+            return `${Math.round(minutesDifference)} minutes ago`;
+        }
+    
+        const hoursDifference = minutesDifference / 60;
+    
+        if (hoursDifference <= 24) {
+            return `${Math.round(hoursDifference)} hours ago`;
+        }
+    
+        const cellDate = new Date(year, month - 1, day);
         const daysDifference = Math.round((today - cellDate) / msInADay);
     
-        if (daysDifference === 0) {
-            return "Today";
+        if (daysDifference === 1) {
+            return "1 day ago";
         } else if (daysDifference < 30) {
             return `${daysDifference} days ago`;
         } else {
@@ -43,6 +68,8 @@ document.addEventListener("DOMContentLoaded", function() {
             return `${months} mo. ago`;
         }
     }
+    
+    
     function setInnerRowPadding(tdElement) {
         tdElement.style.padding = "7px";  // You can adjust the value of padding as per your requirements
         tdElement.style.paddingLeft = "15px";   // Set the left padding
@@ -76,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
             trSpacer1.appendChild(tdSpacer1);
             table.appendChild(trSpacer1);
             // Format the date
-            let formattedDate = formatDate(row.Date);
+            let formattedDate = formatDate(row.Date, row.datetime_email_date);
             
             // Create row for 'Date'
             let trDate = document.createElement('tr');
@@ -116,31 +143,31 @@ document.addEventListener("DOMContentLoaded", function() {
             // Check if links were successfully parsed
             if (links && Array.isArray(links)) {
                 links.forEach((link, index) => {
-                    // Extract the desired part of the URL
-                    let withoutHttps = link.replace('https://', '');
-                    let extractedPart = withoutHttps.startsWith('www.') ? withoutHttps.split('www.')[1].split('.')[0] : withoutHttps.split('.')[0];
+                    // Remove the protocol and 'www.' prefix, then split by '/' to isolate the domain
+                    let domainName = link.replace(/(https?:\/\/)?(www\.)?/, '').split('/')[0];
+            
+                    // Construct the desired display URL
+                    let displayLink = domainName + "/link";
                     
-                    // Capitalize the first letter
-                    let capitalizedPart = extractedPart.charAt(0).toUpperCase() + extractedPart.slice(1);
-
                     // Create a link element
                     let linkElement = document.createElement('a');
                     linkElement.href = link;
                     linkElement.target = "_blank";  // Open in a new tab
-                    linkElement.textContent = `${index + 1}. ${capitalizedPart}`;
-
+                    linkElement.textContent = `${index + 1}. ${displayLink}`;
+            
                     // Style the link
-                    linkElement.style.fontSize = '10px';         // Small font size
-                    linkElement.style.color = '#6767bf';              // Default text color
+                    linkElement.style.fontSize = '12px';         // Small font size
+                    linkElement.style.color = '#9c9df7';              // Default text color
                     linkElement.style.padding = '5px 0px';      // Some padding
                     linkElement.style.paddingRight = "15px";
                     linkElement.style.borderRadius = '20px';     // Rounded corners
-                    linkElement.style.marginRight = '0px';      // Some spacing between links if there are multiple
-
+                    linkElement.style.marginRight = '0px';
+                    linkElement.style.fontWeight = "bold"; 
                     // Append the link to the td
                     tdLinks.appendChild(linkElement);
                 });
             }
+            
 
             trLinks.appendChild(tdLinks);
             table.appendChild(trLinks);
@@ -325,8 +352,57 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check if we're in the 'Daily' mode
         if (dropdown1.value === 'Daily') {
             const selectedDate = new Date(dropdown2.value);
-            const formattedDate = `${('0' + selectedDate.getDate()).slice(-2)}/${('0' + (selectedDate.getMonth() + 1)).slice(-2)}/${selectedDate.getFullYear()}`;
-            filteredData = filteredData.filter(row => row.Date === formattedDate);
+            const currentDate = new Date();  // Current date and time
+            const twentyFourHoursAgo = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));  // Time 24 hours ago
+        
+            console.log("Selected Date:", selectedDate);
+            console.log("Current Date:", currentDate);
+            console.log("24 Hours Ago:", twentyFourHoursAgo);
+        
+            // Check if selectedDate is the same as the current date
+            if (
+                selectedDate.getDate() === currentDate.getDate() &&
+                selectedDate.getMonth() === currentDate.getMonth() &&
+                selectedDate.getFullYear() === currentDate.getFullYear()
+            ) {
+                // Filter rows from the last 24 hours
+                filteredData = filteredData.filter(row => {
+                    
+                    if (!row.datetime_email_date) {
+                        console.log("Row with missing datetime_email_date", row);
+                        return false;  // Exclude rows with missing datetime_email_date
+                    }
+        
+                    // Extract the date and time parts
+                    const [datePart, timePart] = row.datetime_email_date.split(' ');
+                    const [year, month, day] = datePart.split('-').map(Number);  // Adjusted here
+                    const [hour, minute, second] = timePart.split(':').map(Number);
+        
+                    // Construct a Date object for datetime_email_date using individual components
+                    const emailDateTime = new Date(year, month - 1, day, hour, minute, second);
+                    
+                    console.log("Row datetime_email_date:", row.datetime_email_date);
+                    console.log("Constructed EmailDateTime:", emailDateTime);
+        
+                    return emailDateTime > twentyFourHoursAgo;
+                });
+            } else {
+                const formattedDate = `${('0' + selectedDate.getDate()).slice(-2)}/${('0' + (selectedDate.getMonth() + 1)).slice(-2)}/${selectedDate.getFullYear()}`;
+                filteredData = filteredData.filter(row => row.Date === formattedDate);
+            }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         } else if (dropdown1.value === 'Weekly') {
             const selectedWeekStartDate = dropdown2.value;
             filteredData = filteredData.filter(row => row.wc_date === selectedWeekStartDate);

@@ -22,7 +22,8 @@ body, html {
 }
 
 #site-logo {
-  width: 70%; /* This will make the image take up 50% of its container's width */
+  width: 90%;
+   /* This will make the image take up 50% of its container's width */
   /* height will adjust automatically to maintain aspect ratio unless you specify it */
   /* padding-left: 50px; */
   
@@ -88,7 +89,7 @@ body, html {
   align-items: center; /* Vertically centers the title and filter */
   justify-content: space-between; /* Spreads out the title and filter */
   margin: 0 auto;
-  padding-bottom: 3%;
+  padding-bottom: 1%;
   
   
   
@@ -119,9 +120,12 @@ body, html {
 .filter-container {
   border: 0px solid green;
   display: flex;
-  align-items: center;
+  align-items: center; /* This aligns items vertically in the center */
+  justify-content: center; /* This centers items horizontally */
   font-size: 12px;
   margin-left: 6px;
+  flex-wrap: wrap; /* Retaining this property to allow items to wrap onto multiple lines when needed */
+  gap: 6px; /* Gap between items */
 }
 
 .filter-container::before {
@@ -129,7 +133,9 @@ body, html {
   color: #61747a;
   margin-right: 0px;
   font-size: 12px;
+  flex-shrink: 0;
 }
+
 
 .table-container {
   border: 0px solid blue;
