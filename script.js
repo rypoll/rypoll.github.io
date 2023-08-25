@@ -22,52 +22,76 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-
     function formatDate(cellDateStr, cellDateTimeStr) {
-        if (!cellDateStr || !cellDateTimeStr) return "Invalid Date"; 
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Resetting the time part, considering only the date part
-    
+        
         const msInAMinute = 60 * 1000;
         const msInAnHour = 60 * msInAMinute;
         const msInADay = 24 * msInAnHour;
     
-        const [day, month, year] = cellDateStr.split("/");
-        
-        const [datePart, timePart] = cellDateTimeStr.split(' ');
-        const [hour, minute, second] = timePart.split(':').map(Number);
+        if (cellDateTimeStr) {
+            // Recognize the new format
+            const regexFull = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})([+-]\d{2}:\d{2})/;
+            const matchFull = cellDateTimeStr.match(regexFull);
+    
+            if (matchFull) {
+                const [_, year, month, day, hour, minute, second, tz] = matchFull;
+                const sign = tz[0];
+                const tzHour = Number(tz.substr(1, 2));
+                const tzMinute = Number(tz.substr(4, 2));
+                
+                // Convert the cellDateTime to the UTC time considering the timezone offset
+                const utcCellDateTime = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+                utcCellDateTime.setHours(utcCellDateTime.getHours() - (sign === '+' ? tzHour : -tzHour));
+                utcCellDateTime.setMinutes(utcCellDateTime.getMinutes() - (sign === '+' ? tzMinute : -tzMinute));
+               
+                const currentTime = new Date();
+                const minutesDifference = (currentTime - utcCellDateTime) / msInAMinute;
+                
+                if (minutesDifference <= 60) {
+                    if (minutesDifference <= 1) {
+                        return "Just now";
+                    }
+                    return `${Math.round(minutesDifference)} minutes ago`;
+                }
             
-        // Construct the full date-time object
-        const cellDateTime = new Date(year, month - 1, day, hour, minute, second);
-        const currentTime = new Date();
-    
-        const minutesDifference = (currentTime - cellDateTime) / msInAMinute;
-        
-        if (minutesDifference <= 60) {
-            if (minutesDifference <= 1) {
-                return "Just now"; // Optional: If it's less than a minute, you might want to say "Just now"
+                const hoursDifference = minutesDifference / 60;
+                if (hoursDifference <= 24) {
+                    return `${Math.round(hoursDifference)} hours ago`;
+                }
             }
-            return `${Math.round(minutesDifference)} minutes ago`;
         }
+        
+        if (!cellDateStr) return "Invalid Date";  // Added this check here.
     
-        const hoursDifference = minutesDifference / 60;
-    
-        if (hoursDifference <= 24) {
-            return `${Math.round(hoursDifference)} hours ago`;
-        }
-    
+        // For dates that are older than 24 hours, just display them as days, months etc. as before.
+        const [day, month, year] = cellDateStr.split("/");
         const cellDate = new Date(year, month - 1, day);
         const daysDifference = Math.round((today - cellDate) / msInADay);
-    
+        
         if (daysDifference === 1) {
             return "1 day ago";
         } else if (daysDifference < 30) {
             return `${daysDifference} days ago`;
         } else {
-            const months = Math.ceil(daysDifference / 30);  // Using Math.ceil to round up
+            const months = Math.ceil(daysDifference / 30);
             return `${months} mo. ago`;
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     function setInnerRowPadding(tdElement) {
@@ -102,6 +126,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             trSpacer1.appendChild(tdSpacer1);
             table.appendChild(trSpacer1);
+            console.log('Before formatting:', row.Date, row.datetime_email_date);
+
             // Format the date
             let formattedDate = formatDate(row.Date, row.datetime_email_date);
             
@@ -135,38 +161,64 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Parse the string array
             let links;
-            try {
-                links = JSON.parse(row['Associated Links'].replace(/'/g, "\""));
-            } catch (e) {
-                console.error("Failed to parse links:", row['Associated Links']);
+            function safeJSONParse(str) {
+                try {
+                    return JSON.parse(str); // Try parsing as is
+                } catch (e1) {
+                    try {
+                        return JSON.parse(str.replace(/'/g, "\"")); // Try replacing single quotes
+                    } catch (e2) {
+                        console.error("Failed to parse string in both attempts:", str, "Errors:", e1.message, e2.message);
+                        return null;
+                    }
+                }
             }
+            
+            // Usage
+            links = safeJSONParse(row['Associated Links']);
             // Check if links were successfully parsed
             if (links && Array.isArray(links)) {
                 links.forEach((link, index) => {
+                    // Create a wrapper div for each link
+                    let linkWrapper = document.createElement('div');
+                    
+                    // Create a span for the number
+                    let numberSpan = document.createElement('span');
+                    numberSpan.textContent = `${index + 1}. `;
+                    numberSpan.style.fontSize = '12px';         // Match the font size of the link
+                    numberSpan.style.color = 'white';            // White color for the number
+                    numberSpan.style.fontWeight = "bold";        // Bold weight
+
+                    // Append the number span to the wrapper
+                    linkWrapper.appendChild(numberSpan);
+                    
                     // Remove the protocol and 'www.' prefix, then split by '/' to isolate the domain
                     let domainName = link.replace(/(https?:\/\/)?(www\.)?/, '').split('/')[0];
-            
                     // Construct the desired display URL
-                    let displayLink = domainName + "/link";
-                    
+                    let displayLink = domainName + "/...";
                     // Create a link element
                     let linkElement = document.createElement('a');
                     linkElement.href = link;
                     linkElement.target = "_blank";  // Open in a new tab
-                    linkElement.textContent = `${index + 1}. ${displayLink}`;
-            
+                    linkElement.textContent = displayLink;
                     // Style the link
                     linkElement.style.fontSize = '12px';         // Small font size
-                    linkElement.style.color = '#9c9df7';              // Default text color
-                    linkElement.style.padding = '5px 0px';      // Some padding
+                    linkElement.style.color = '#9c9df7';         // Default text color
+                    linkElement.style.padding = '5px 0px';       // Some padding
                     linkElement.style.paddingRight = "15px";
                     linkElement.style.borderRadius = '20px';     // Rounded corners
                     linkElement.style.marginRight = '0px';
                     linkElement.style.fontWeight = "bold"; 
-                    // Append the link to the td
-                    tdLinks.appendChild(linkElement);
+                    linkElement.style.textDecoration = "none";   // Remove underline
+                    
+                    // Append the link to the wrapper
+                    linkWrapper.appendChild(linkElement);
+                    
+                    // Append the wrapper to the td
+                    tdLinks.appendChild(linkWrapper);
                 });
             }
+
             
 
             trLinks.appendChild(tdLinks);
@@ -182,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
             setInnerRowPadding(tdCategory);
             let categories = row.Category.slice(1, -1).split(',').map(item => item.trim().slice(1, -1));
 
-            console.log(row.Category, typeof row.Category);
+            //console.log(row.Category, typeof row.Category);
 
             // Loop through the category array and format each category
             categories.forEach(cat => {
@@ -202,6 +254,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 // Set the text content
                 span.textContent = displayCat;
+                span.style.marginBottom = "5px"; // or any value you see fit
+
                 
                 // Append to the table cell
                 tdCategory.appendChild(span);
@@ -215,65 +269,65 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-
+                        
             // Create row for 'L'
             let trSeoStats = document.createElement('tr');
             let tdSeoStats = document.createElement('td');
             setInnerRowPadding(tdSeoStats);
-            
 
             // Format the number from 'L'
             let formattedNumber;
-            if (!row.L && row.L !== 0) {
-                formattedNumber = 'N/A';
+            if (row.L || row.L === 0) {
+                if (!row.L && row.L !== 0) {
+                    //trSeoStats.style.height = "1px"; // Set the row height to 1px
+                    //trSeoStats.style.visibility = "hidden"; // Hide the content of the row
+                    formattedNumber = '-'; 
+                } else if (row.L < 1000) {
+                    formattedNumber = parseInt(row.L);
+                } else if (row.L >= 1000 && row.L < 10000) {
+                    formattedNumber = `${(row.L / 1000).toFixed(1)}K`;
+                } else if (row.L >= 10000 && row.L < 1000000) {
+                    formattedNumber = `${Math.round(row.L / 1000)}K`;
+                } else if (row.L >= 1000000 && row.L < 10000000) {
+                    formattedNumber = `${(row.L / 1000000).toFixed(1)}M`;
+                } else {
+                    formattedNumber = `${Math.round(row.L / 1000000)}M`;
+                }
                 
-                // Log the row to console to inspect its data
-                console.log('Row with N/A value for L:', row);
-                
-            } else if (row.L < 1000) {
-                formattedNumber = parseInt(row.L);
-            } else if (row.L >= 1000 && row.L < 10000) {
-                formattedNumber = `${(row.L / 1000).toFixed(1)}K`;
-            } else if (row.L >= 10000 && row.L < 1000000) {
-                formattedNumber = `${Math.round(row.L / 1000)}K`;
-            } else if (row.L >= 1000000 && row.L < 10000000) {
-                formattedNumber = `${(row.L / 1000000).toFixed(1)}M`;
-            } else {
-                formattedNumber = `${Math.round(row.L / 1000000)}M`;
-            }
-            
 
-            // Combined span for the link icon and the formatted number with shared background
-            let combinedSpan = document.createElement('span');
-            combinedSpan.style.background = "#5f5179";
-            combinedSpan.style.padding = "8px 10px";
-            combinedSpan.style.borderRadius = "20px";
-            combinedSpan.style.color = "white";
-            combinedSpan.style.lineHeight = "2.5";
+                // Combined span for the link icon and the formatted number with shared background
+                let combinedSpan = document.createElement('span');
+                combinedSpan.style.background = "#5f5179";
+                combinedSpan.style.padding = "8px 10px";
+                combinedSpan.style.borderRadius = "20px";
+                combinedSpan.style.color = "white";
+                combinedSpan.style.lineHeight = "2.5";
 
-            let linkIcon = document.createTextNode('🔗');  // Using a text node to keep them together
-            combinedSpan.appendChild(linkIcon);
+                let linkIcon = document.createTextNode('🔗');  // Using a text node to keep them together
+                combinedSpan.appendChild(linkIcon);
 
-            let spanNumber = document.createElement('span');
-            spanNumber.textContent = formattedNumber;
-            combinedSpan.appendChild(spanNumber);
+                let spanNumber = document.createElement('span');
+                spanNumber.textContent = formattedNumber;
+                combinedSpan.appendChild(spanNumber);
 
-            // Tooltip for the combined span
-            combinedSpan.title = "Backlinks are incoming links to a webpage. They serve as a proxy for content quality and popularity in SEO metrics.";
+                // Tooltip for the combined span
+                combinedSpan.title = "Backlinks are incoming links to a webpage. They serve as a proxy for content quality and popularity in SEO metrics.";
 
-            // Appending elements to the tdSeoStats
-            tdSeoStats.appendChild(combinedSpan);
+                // Appending elements to the tdSeoStats
+                tdSeoStats.appendChild(combinedSpan);
+        }
             tdSeoStats.style.fontSize = "11px";  // Setting the font size
             tdSeoStats.style.fontWeight = "bold";
             tdSeoStats.style.paddingBottom = "20px";
 
-
-
-
-
             // Append the table cell to the row, and then append the row to the table
             trSeoStats.appendChild(tdSeoStats);
             table.appendChild(trSeoStats);
+
+
+
+
+
 
             
             tbody.appendChild(trDate);
@@ -372,18 +426,24 @@ document.addEventListener("DOMContentLoaded", function() {
                         console.log("Row with missing datetime_email_date", row);
                         return false;  // Exclude rows with missing datetime_email_date
                     }
-        
-                    // Extract the date and time parts
-                    const [datePart, timePart] = row.datetime_email_date.split(' ');
+                        
+                    // Extract the date, time, and timezone offset parts
+                    const [datePart, timeWithZonePart] = row.datetime_email_date.split(' ');
                     const [year, month, day] = datePart.split('-').map(Number);  // Adjusted here
+                    const [timePart, timezonePart] = timeWithZonePart.split('+');
                     const [hour, minute, second] = timePart.split(':').map(Number);
-        
+
+                    const timezoneOffsetMinutes = (timezonePart) ? 
+                                                (parseInt(timezonePart.substr(0,3), 10) * 60) + 
+                                                parseInt(timezonePart.substr(3,2), 10) : 
+                                                0;
+
                     // Construct a Date object for datetime_email_date using individual components
-                    const emailDateTime = new Date(year, month - 1, day, hour, minute, second);
-                    
+                    const emailDateTime = new Date(Date.UTC(year, month - 1, day, hour, minute, second) - timezoneOffsetMinutes*60*1000);
+
                     console.log("Row datetime_email_date:", row.datetime_email_date);
                     console.log("Constructed EmailDateTime:", emailDateTime);
-        
+
                     return emailDateTime > twentyFourHoursAgo;
                 });
             } else {
