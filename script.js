@@ -1,4 +1,29 @@
 document.addEventListener("DOMContentLoaded", function() {
+    var dropdown = document.getElementById("dropdown1");
+    var today = new Date();
+    var dayOfWeek = today.getDay();
+
+    if (dayOfWeek === 0 || dayOfWeek === 6) {  // 0 = Sunday, 6 = Saturday
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].text === 'Weekly') {
+                dropdown.selectedIndex = i;
+                break;
+            }
+        }
+    }
+});
+
+
+function toggleAboutText() {
+    var x = document.getElementById("aboutText");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
     let currentPage = 1;
     const rowsPerPage = 20; // Each row in your CSV results in 5 rows in the table, so this essentially gets 4 original CSV rows per page
     let allData = [];
@@ -107,6 +132,35 @@ document.addEventListener("DOMContentLoaded", function() {
         table.innerHTML = ""; // clear previous content
     
         let slicedData = data.slice(start, start + rowsPerPage);
+
+        if (slicedData.length === 0) {
+            console.log('No data to populate the table');
+        }
+
+
+        if (data.length === 0) {
+            // Create a row and cell
+            let messageRow = document.createElement('tr');
+            let messageCell = document.createElement('td');
+        
+            // Set the message and colspan
+            messageCell.textContent = "As of yet, there's no news for today! Please filter by 'Weekly' or check out yesterday's news!";
+            messageCell.colSpan = 5; // or however many columns your table has
+        
+            // Append the message cell to the message row
+            messageRow.appendChild(messageCell);
+        
+            // Append the message row to the table
+            table.appendChild(messageRow);
+        
+            // Apply margin to the entire table
+            table.style.marginTop = '10%'; // or whatever value you want
+            return;
+        } else {
+            table.style.marginTop = '0'; // reset margin to original value
+        }
+        
+
     
         slicedData.forEach((row, rowIndex) => {
                     // Create a tbody for each 'X'
@@ -126,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             trSpacer1.appendChild(tdSpacer1);
             table.appendChild(trSpacer1);
-            console.log('Before formatting:', row.Date, row.datetime_email_date);
+            //console.log('Before formatting:', row.Date, row.datetime_email_date);
 
             // Format the date
             let formattedDate = formatDate(row.Date, row.datetime_email_date);
@@ -409,9 +463,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const currentDate = new Date();  // Current date and time
             const twentyFourHoursAgo = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));  // Time 24 hours ago
         
-            console.log("Selected Date:", selectedDate);
-            console.log("Current Date:", currentDate);
-            console.log("24 Hours Ago:", twentyFourHoursAgo);
+            //console.log("Selected Date:", selectedDate);
+            //console.log("Current Date:", currentDate);
+            //console.log("24 Hours Ago:", twentyFourHoursAgo);
         
             // Check if selectedDate is the same as the current date
             if (
@@ -423,7 +477,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 filteredData = filteredData.filter(row => {
                     
                     if (!row.datetime_email_date) {
-                        console.log("Row with missing datetime_email_date", row);
+                        //console.log("Row with missing datetime_email_date", row);
                         return false;  // Exclude rows with missing datetime_email_date
                     }
                         
@@ -441,8 +495,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Construct a Date object for datetime_email_date using individual components
                     const emailDateTime = new Date(Date.UTC(year, month - 1, day, hour, minute, second) - timezoneOffsetMinutes*60*1000);
 
-                    console.log("Row datetime_email_date:", row.datetime_email_date);
-                    console.log("Constructed EmailDateTime:", emailDateTime);
+                    //console.log("Row datetime_email_date:", row.datetime_email_date);
+                    //console.log("Constructed EmailDateTime:", emailDateTime);
 
                     return emailDateTime > twentyFourHoursAgo;
                 });
@@ -480,6 +534,10 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
         filteredData.sort(sortByBacklinks);
+        if (filteredData.length === 0) {
+            console.log('No data after filtering');
+        }
+        
         populateTable(filteredData, 0);
         generatePagination(filteredData.length);
     }
@@ -561,6 +619,9 @@ document.addEventListener("DOMContentLoaded", function() {
             month--;
         }
     }
+
+
+    
 
 
 

@@ -26,6 +26,7 @@ body, html {
    /* This will make the image take up 50% of its container's width */
   /* height will adjust automatically to maintain aspect ratio unless you specify it */
   /* padding-left: 50px; */
+
   
 }
 
@@ -52,12 +53,13 @@ body, html {
   
 
 
-  align-items: center;
+  align-items: left;
   flex-direction: column; /* Changes from column to row so items are side by side */
-  align-items: center; /* Vertically centers the title and filter */
+  align-items: left; /* Vertically centers the title and filter */
   justify-content: space-between; /* Spreads out the title and filter */
-  margin: 0 auto;
+
   padding-bottom: 3%;
+  text-align: left;
   
   
   
@@ -67,7 +69,7 @@ body, html {
 
 .title-container, .table-container {
   width: 50%;  /* This is a starting width. Adjust as needed */
-  margin: 0 auto;
+
 }
 
 @media (max-width: 1200px) {
@@ -112,11 +114,54 @@ body, html {
   
 }
 
+
+.about-link {
+  font-size: 1.3vh;
+  color: #61747a;
+  text-decoration: none;
+  text-align: left;
+  margin-left: 6%;
+
+ /* To center the text block if it's narrower than the container */
+
+
+  margin-top: 20px;
+
+}
+
+.about-link .info-icon {
+  border: 1px solid #333;
+  border-radius: 50%;
+  padding: 2px;
+  margin-left: 5px;
+
+  top: -1px;
+  font-size: 1.3vh;
+}
+
+.about-link .arrow {
+  font-size: 22px;
+  margin-left: 5px;
+}
+
+.about-text-container {
+  display: none;
+  font-size: 12px;
+  margin-top: 20px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #61747a;
+  text-align: left;
+  max-width: 800px;
+}
+
+
 .title-container p {
-  text-align: justify;
+  text-align: left;
   max-width: 800px; /* You can adjust this value based on your design */
   margin: 0 auto; /* To center the text block if it's narrower than the container */
-  color: #f0f0f0; /* To match the color scheme you provided */
+  color: #61747a; /* To match the color scheme you provided */
   font-size: 12px; /* Adjust based on your design preferences */
 }
 
