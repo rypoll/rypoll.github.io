@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function() {
-    var dropdown = document.getElementById("dropdown1");
-    var today = new Date();
-    var dayOfWeek = today.getDay();
+// document.addEventListener("DOMContentLoaded", function() {
+//     var dropdown = document.getElementById("dropdown1");
+//     var today = new Date();
+//     var dayOfWeek = today.getDay();
 
-    if (dayOfWeek === 0 || dayOfWeek === 6) {  // 0 = Sunday, 6 = Saturday
-        for (var i = 0; i < dropdown.options.length; i++) {
-            if (dropdown.options[i].text === 'Weekly') {
-                dropdown.selectedIndex = i;
-                break;
-            }
-        }
-    }
-});
+//     if (dayOfWeek === 0 || dayOfWeek === 6) {  // 0 = Sunday, 6 = Saturday
+//         for (var i = 0; i < dropdown.options.length; i++) {
+//             if (dropdown.options[i].text === 'Weekly') {
+//                 dropdown.selectedIndex = i;
+//                 break;
+//             }
+//         }
+//     }
+// });
 
 
 function toggleAboutText() {
