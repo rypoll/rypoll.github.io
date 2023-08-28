@@ -144,7 +144,9 @@ document.addEventListener("DOMContentLoaded", function() {
             let messageCell = document.createElement('td');
         
             // Set the message and colspan
+            messageCell.style.textAlign = 'center';
             messageCell.textContent = "As of yet, there's no news for today! Please filter by 'Weekly' or check out yesterday's news!";
+            
             messageCell.colSpan = 5; // or however many columns your table has
         
             // Append the message cell to the message row
@@ -167,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let tbody = document.createElement('tbody');
             setInnerRowPadding(tbody)
             tbody.style.border = "0px solid #000";  // Give it a border
-            tbody.style.background = "#38333e";
+            tbody.style.background = "#FFFFFF";
              // Set background color to white
 
              // Add the border to the last 'tr' of each group (i.e., the 'tr' for 'L' / SEO Stats in your example)
@@ -240,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     let numberSpan = document.createElement('span');
                     numberSpan.textContent = `${index + 1}. `;
                     numberSpan.style.fontSize = '12px';         // Match the font size of the link
-                    numberSpan.style.color = 'white';            // White color for the number
+                    numberSpan.style.color = 'black';            // White color for the number
                     numberSpan.style.fontWeight = "bold";        // Bold weight
 
                     // Append the number span to the wrapper
@@ -249,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Remove the protocol and 'www.' prefix, then split by '/' to isolate the domain
                     let domainName = link.replace(/(https?:\/\/)?(www\.)?/, '').split('/')[0];
                     // Construct the desired display URL
-                    let displayLink = domainName + "/...";
+                    let displayLink = domainName + "";
                     // Create a link element
                     let linkElement = document.createElement('a');
                     linkElement.href = link;
@@ -257,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     linkElement.textContent = displayLink;
                     // Style the link
                     linkElement.style.fontSize = '12px';         // Small font size
-                    linkElement.style.color = '#9c9df7';         // Default text color
+                    linkElement.style.color = '#1F77B4';         // Default text color
                     linkElement.style.padding = '5px 0px';       // Some padding
                     linkElement.style.paddingRight = "15px";
                     linkElement.style.borderRadius = '20px';     // Rounded corners
@@ -351,13 +353,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Combined span for the link icon and the formatted number with shared background
                 let combinedSpan = document.createElement('span');
-                combinedSpan.style.background = "#5f5179";
+                combinedSpan.style.background = "#3EB489";
                 combinedSpan.style.padding = "8px 10px";
                 combinedSpan.style.borderRadius = "20px";
                 combinedSpan.style.color = "white";
                 combinedSpan.style.lineHeight = "2.5";
 
-                let linkIcon = document.createTextNode('🔗');  // Using a text node to keep them together
+                let linkIcon = document.createTextNode('🔗 ');  // Using a text node to keep them together
                 combinedSpan.appendChild(linkIcon);
 
                 let spanNumber = document.createElement('span');
@@ -372,6 +374,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
             tdSeoStats.style.fontSize = "11px";  // Setting the font size
             tdSeoStats.style.fontWeight = "bold";
+            tdSeoStats.style.color = "white";
             tdSeoStats.style.paddingBottom = "20px";
 
             // Append the table cell to the row, and then append the row to the table
@@ -391,17 +394,19 @@ document.addEventListener("DOMContentLoaded", function() {
             tbody.appendChild(trSeoStats);
             
             table.appendChild(tbody);
-    
-            // Spacer is outside of the tbody
-            let trSpacer = document.createElement('tr');
-            let tdSpacer = document.createElement('td');
-            tdSpacer.style.height = "10px";  // Adjust this value as needed
-            tdSpacer.style.borderBottom = "1px solid rgb(50, 50, 50)"; // Spacer's border color
-            tdSpacer.style.backgroundColor = "transparent"; // Make sure it's transparent
 
-            
-            trSpacer.appendChild(tdSpacer);
-            table.appendChild(trSpacer);
+            // check if this is the last element in slicedData
+            if (rowIndex < slicedData.length - 1) {
+                // Spacer is outside of the tbody
+                let trSpacer = document.createElement('tr');
+                let tdSpacer = document.createElement('td');
+                tdSpacer.style.height = "10px";
+                tdSpacer.style.borderBottom = "1px solid rgb(230, 230, 230)";
+                tdSpacer.style.backgroundColor = "transparent";
+        
+                trSpacer.appendChild(tdSpacer);
+                table.appendChild(trSpacer);
+            }
 
 
 
@@ -462,6 +467,8 @@ document.addEventListener("DOMContentLoaded", function() {
             const selectedDate = new Date(dropdown2.value);
             const currentDate = new Date();  // Current date and time
             const twentyFourHoursAgo = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));  // Time 24 hours ago
+            const thirtySixHoursAgo = new Date(currentDate.getTime() - (36 * 60 * 60 * 1000));
+
         
             //console.log("Selected Date:", selectedDate);
             //console.log("Current Date:", currentDate);
@@ -498,7 +505,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     //console.log("Row datetime_email_date:", row.datetime_email_date);
                     //console.log("Constructed EmailDateTime:", emailDateTime);
 
-                    return emailDateTime > twentyFourHoursAgo;
+                    return emailDateTime > thirtySixHoursAgo;
                 });
             } else {
                 const formattedDate = `${('0' + selectedDate.getDate()).slice(-2)}/${('0' + (selectedDate.getMonth() + 1)).slice(-2)}/${selectedDate.getFullYear()}`;

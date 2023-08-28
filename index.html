@@ -15,15 +15,20 @@
 <body>
     <!-- Title Container -->
     <div class="container title-container">
-        <img src="logo11.png" alt="The AI Digestive" id="site-logo" style="display: block; margin: 0 auto;">
-        <a href="javascript:void(0)" onclick="toggleAboutText()" class="about-link">What is this? <span class="info-icon">&#x25BC;</span></a>
+        <img src="logo-light-1.png" alt="The AI Digestive" id="site-logo" style="display: block; margin: 0 auto;">
+        <a href="javascript:void(0)" onclick="toggleAboutText()" class="about-link">About<span class="info-icon">&#x25BC;</span></a>
 
 
         <div id="aboutText" class="about-text-container" >
             <p>
-                The AI Digestive is a newsletter digest that aggregates AI news coming from many email newsletters, and assigns popularity scores for each news piece based on the number of backlinks associated with each link.
+                <ul>
+                    <li>The AI Digestive is a newsletter digest that summarizes AI news across various email newsletters using OpenAI.</li>
+                    <li>Each news item's related hyperlink is assigned a popularity score based on the number of backlinks the link has.</li>
+                    <li>A backlink serves as a measure of the popularity of the link. A backlink is the number of time that link has been linked to across the internet.</li>
+                </ul>
+                
                 <br><br>
-                It serves as a central repository to find the latest advancements in AI.
+                Overall, this website serves as a central repository to find the latest advancements in AI in a quick and simple way, sorted by popularity across desired time-frames.
             </p>
         </div>
     </div>
@@ -46,8 +51,8 @@
     <!-- Table Container -->
     <div class="container table-container">
         <!-- Filter Container -->
+        <div class="filter-label">Filter By:</div>
         <div class="filter-container">
-            <!-- "Filter By:" is automatically added by the ::before pseudo-element in the CSS -->
             <select id="dropdown1">
                 <option selected>Daily</option>
                 <option>Weekly</option>
@@ -71,6 +76,9 @@
         <table id="data-table"></table>
         <div id="pagination"></div>
     </div>
+    <footer>
+        <p>&copy; 2023 Ryan Pollard. All rights reserved.</p>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>

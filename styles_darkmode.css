@@ -1,15 +1,13 @@
 body, html {
-  background-color: #F5F5F5;
+  background-color: #2c2537;
   font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
-  color: #333333;
+  color: #f0f0f0;
   margin: 0;
   padding: 5% 0; /* Removed left and right padding here */
   display: flex;
   flex-direction: column;
   align-items: center; /* Centering children */
   padding-top: 1%;
-  overflow-x: hidden;
-  
   
 }
 
@@ -110,10 +108,10 @@ li {
 .title-container h1 {
   font-family: 'Inter', monospace;
   font-size: 40px;
-  color: #333333;
+  color: white;
   text-align: left;
   margin: 0;
-  margin-bottom: 0%;
+  margin-bottom: 1%;
 
   
 }
@@ -121,7 +119,7 @@ li {
 
 .about-link {
   font-size: 1.3vh;
-  color: #1F77B4;
+  color: #61747a;
   text-decoration: none;
   text-align: left;
   margin-left: 6%;
@@ -129,24 +127,18 @@ li {
  /* To center the text block if it's narrower than the container */
 
 
-  margin-top: 2px;
+  margin-top: 20px;
 
 }
 
 .about-link .info-icon {
-  /* border: 1px solid #333; */
+  border: 1px solid #333;
   border-radius: 50%;
-  
   padding: 2px;
   margin-left: 5px;
-  /* color: #3EB489; */
 
   top: -1px;
   font-size: 1.3vh;
-}
-
-.info-icon {
-  font-size: 0.1vh;
 }
 
 .about-link .arrow {
@@ -157,7 +149,7 @@ li {
 .about-text-container {
   display: none;
   font-size: 12px;
-  margin-top: 0px;
+  margin-top: 20px;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
@@ -171,7 +163,7 @@ li {
   text-align: left;
   max-width: 800px; /* You can adjust this value based on your design */
   margin: 0 auto; /* To center the text block if it's narrower than the container */
-  color: #333333;
+  color: #61747a; /* To match the color scheme you provided */
   font-size: 12px; /* Adjust based on your design preferences */
 }
 
@@ -187,20 +179,13 @@ li {
   gap: 6px; /* Gap between items */
 }
 
-
-
-.filter-container {
-  display: flex;
-  align-items: center;
-}
-
-.filter-label {
+.filter-container::before {
+  content: "Filter By:";
   color: #61747a;
+  margin-right: 0px;
   font-size: 12px;
-  text-align: center;
-  margin-bottom: 10px;
+  flex-shrink: 0;
 }
-
 
 
 .table-container {
@@ -225,82 +210,112 @@ table td, table th {
 }
 
 select {
-  width: auto;
+  width: auto; /* adjusted based on your requirements */
   padding: 10px;
-  background-color: #3EB489;
-  border: none;
-  color: #F5F5F5;
+  background-color: #2c2537; /* changed to match the website background */
+  border: none; /* removed border */
+  color: #61747a;
   font-size: 12px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 25px;
+  appearance: none; /* for certain browsers to remove default styling */
+  -webkit-appearance: none; /* for Chrome and Safari */
+  -moz-appearance: none; /* for Firefox */
+  padding-right: 25px; /* Make space for the down arrow image */
   background-image: url('data:image/svg+xml;utf8,<svg width="10" height="6" xmlns="http://www.w3.org/2000/svg"><path d="M0 0L5 6L10 0" fill="none" stroke="%2361747a" stroke-width="2"/></svg>');
   background-repeat: no-repeat;
-  background-position: calc(100% - 10px) center;
-  border-radius: 10px;
-  outline: none;
+  background-position: calc(100% - 10px) center; /* Positioning the arrow a bit more towards the right *//* Positioning the arrow a bit more towards the right */ /* Position the arrow on the right (with a little space in between) */
+  border-radius: 5px; /* Default border-radius for the select element */
+  outline: none; /* Removes the default browser focus outline */
   font-weight: bold;
+  
+
+  
 }
 
 select:hover {
-  background-color: #2c8c6a;
-  border-radius: 10px;
+  background-color: #33464c;
+  border-radius: 15px; /* Increases the border-radius when hovered */
 }
+
 
 select:focus {
-  background-color: #2c8c6a;
-  border-radius: 10px;
+  background-color: #33464c;
+  border-radius: 15px; /* Increases the border-radius when hovered */
 }
 
 
 
+/* Remove the default appearance for the dropdown button */
+#dropdown2, #dropdown1, #dropdown3 {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  
+  /* Add any additional styles for the button here */
+}
 
 /* Attempt to style the options */
 #dropdown2 option, #dropdown1 option, #dropdown3 option {
-  background-color: #F5F5F5;
-  color: #333333;
+  background-color: #2c2537; /* For example, a light gray background */
+  color: #61747a; /* Dark text color */
+  border-style: none;
+  border-color: #2c2537;
+  font-size: 14px; /* Make text bigger */
+  line-height: 5;  /* Increase the height of each option */
+  padding: 5px 10px; /* Add some padding for even more height and comfort */
+
 }
 
 #dropdown2 option:hover, #dropdown1 option:hover, #dropdown3 option:hover {
-  background-color: #3EB489;
-  color: #FFFFFF;
+  background-color: red; /* Example hover color */
+  color: #ffffff; /* Example hover text color */
+}
+
+
+
+
+#dropdown2::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Webkit browsers */
+}
+
+#dropdown2 {
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
 }
 
 
 
 
 
+
+.pagination {
+  margin-top: 10px;
+}
+
 #pagination {
-  margin-top: 20px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
+  justify-content: center;  
+  margin-top: 20px;         
 }
 
 #pagination button {
-  padding: 6px 12px;
-  background-color: #3EB489;
-  color: #FFFFFF;
-  font-size: 12px;
-  border: none;
-  border-radius: 5px;
+  margin: 0 5px;             
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 20px;            /* 1. Border radius */
+  background-color: #5f5179;     /* 2. Background color */
+  border: none;                  /* 5. No border color */
+  color: white;                  /* 6. Font color */
+  font-weight: bold;             /* 6. Font bold */
+  transition: background-color 0.3s; /* Smooth color change transition */
 }
 
 #pagination button.active {
-  background-color: #2c8c6a;
-  color: #FFFFFF;
+  background-color: #9980c4;
+  color: black;   /* 3. Slightly lighter background color */
 }
 
 #pagination button:hover {
-  background-color: #246a53;
-}
-
-#pagination button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-  background-color: #3EB489;
+  background-color: #816ea4;   /* 4. Slightly lighter background color on hover, but not as light as the active state */
 }
 
 
@@ -310,18 +325,17 @@ select:focus {
   color: #61747a;
 }
 
-
-
 .category {
-  text-align: left;
-  color: #FFFFFF;
-  padding: 7px;
-  border-radius: 15px;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 16px;
   margin-right: 5px; /* for space between categories if multiple in a row */
   display: inline-block; /* so they line up next to each other */
-  font-weight: bold;
-  margin-bottom: 2px;
   font-size: 12px;
+  padding-top: 5px;  /* Adds padding to the top of the span */
+  padding-bottom: 5px;  /* Adds padding to the bottom of the span */
+  line-height: 1.0;  /* Adjust this value as needed to control the height of the line of text */
+  
 }
 
 .category.making-money-with-ai { background-color: green; }
@@ -331,7 +345,7 @@ select:focus {
 .category.new-tech-and-ai-tools { background-color: rgb(128, 0, 77); }
 .category.ai-marketing-tools { background-color: rgb(208, 0, 255); }
 .category.ai-in-business { background-color: rgb(221, 181, 0); }
-.category.no-code-ai-use-cases { background-color: #FF6347; }
+.category.no-code-ai-use-cases { background-color: cyan; }
 
 
 
@@ -363,17 +377,4 @@ tbody tr:last-child td {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-
-
-footer {
-  /* background-color: #f1f1f1; */
-  text-align: center;
-  padding: 10px;
-  /* position: fixed; */
-  width: 100%;
-  bottom: 0;
-  font-size: 10px;
-  color: gray;
-}
-
 
