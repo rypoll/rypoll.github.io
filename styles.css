@@ -322,6 +322,7 @@ select:focus {
   font-weight: bold;
   margin-bottom: 2px;
   font-size: 12px;
+  background-color: #FF6347;
 }
 
 .category.making-money-with-ai { background-color: green; }
@@ -332,6 +333,7 @@ select:focus {
 .category.ai-marketing-tools { background-color: rgb(208, 0, 255); }
 .category.ai-in-business { background-color: rgb(221, 181, 0); }
 .category.no-code-ai-use-cases { background-color: #FF6347; }
+.category.ai-tools { background-color: #4682B4; }
 
 
 
