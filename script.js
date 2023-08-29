@@ -467,7 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const selectedDate = new Date(dropdown2.value);
             const currentDate = new Date();  // Current date and time
             const twentyFourHoursAgo = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));  // Time 24 hours ago
-            const thirtySixHoursAgo = new Date(currentDate.getTime() - (36 * 60 * 60 * 1000));
+            const thirtySixHoursAgo = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000)); // replace the 24 with 36 here 
 
         
             //console.log("Selected Date:", selectedDate);
