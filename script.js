@@ -29,7 +29,17 @@ document.addEventListener("DOMContentLoaded", function() {
     let allData = [];
     let filteredData = [];  // Declare it here
     function sortByBacklinks(a, b) {
-        return b["L"] - a["L"]; // This sorts in descending order
+        var dropdownValue = document.getElementById('dropdown4').value;
+
+        if (dropdownValue === 'Popularity') {
+            return b["L"] - a["L"]; // This sorts in descending order
+        } else if (dropdownValue === 'Newest') {
+            var dateA = a["datetime_email_date"] ? new Date(a["datetime_email_date"]) : new Date('9999-12-31T23:59:59Z');
+            var dateB = b["datetime_email_date"] ? new Date(b["datetime_email_date"]) : new Date('9999-12-31T23:59:59Z');
+            return dateB - dateA;
+        }
+    
+        return 0;
     }
     
     // Use PapaParse to read and process the CSV data
@@ -454,10 +464,14 @@ document.addEventListener("DOMContentLoaded", function() {
     const dropdown1 = document.getElementById('dropdown1');
     const dropdown2 = document.getElementById('dropdown2');
     const dropdown3 = document.getElementById('dropdown3');
+    const dropdown4 = document.getElementById('dropdown4');
     
     updateDropdown2();
     dropdown2.addEventListener('change', filterDataByDate);
     dropdown3.addEventListener('change', filterDataByDate);
+    dropdown4.addEventListener('change', filterDataByDate);
+
+
     function filterDataByDate() {
         filteredData = [...allData]; // Start with all the data. Using spread syntax to ensure we get a new array
         
