@@ -563,11 +563,14 @@ document.addEventListener("DOMContentLoaded", function() {
         
                 if (normalizedDropdownValue === 'ai news') {
                     return !categories.some(category => otherOptions.includes(category));
+                } else if (normalizedDropdownValue === 'new tech and ai tools') {
+                    return categories.includes('ai tools') || categories.includes(normalizedDropdownValue);
                 } else {
                     return categories.includes(normalizedDropdownValue);
                 }
             });
         }
+        
         
         filteredData.sort(sortByBacklinks);
         if (filteredData.length === 0) {
