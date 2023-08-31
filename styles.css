@@ -202,6 +202,17 @@ li {
   align-items: center;
 }
 
+#sort-box {
+
+  display: flex; 
+  align-items: center;
+}
+
+.filter-label {
+  padding-right: 10px;
+}
+
+
 .filter-label {
   color: #61747a;
   font-size: 10px;

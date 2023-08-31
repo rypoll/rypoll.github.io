@@ -97,7 +97,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             
                 const hoursDifference = minutesDifference / 60;
-                if (hoursDifference <= 24) {
+                if (hoursDifference <= 1) {
+                    return '1 hour ago';
+                } else if (hoursDifference <= 24) {
                     return `${Math.round(hoursDifference)} hours ago`;
                 }
             }
