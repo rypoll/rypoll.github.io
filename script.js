@@ -550,15 +550,25 @@ document.addEventListener("DOMContentLoaded", function() {
             filteredData = filterDataByMonth(dropdown2.value);
         }
     
+        const allOptions = [...dropdown3.options].map(option => option.value.toLowerCase().replace(/-/g, ' '));
+        const otherOptions = allOptions.filter(option => option !== 'ai news' && option !== 'all categories');
+        
         if (dropdown3.value !== "All Categories") {
             const normalizedDropdownValue = dropdown3.value.toLowerCase().replace(/-/g, ' ');
+        
             filteredData = filteredData.filter(row => {
                 const categories = row.Category.slice(1, -1).split(',').map(item => 
                     item.trim().slice(1, -1).toLowerCase().replace(/-/g, ' ')
                 );
-                return categories.includes(normalizedDropdownValue);
+        
+                if (normalizedDropdownValue === 'ai news') {
+                    return !categories.some(category => otherOptions.includes(category));
+                } else {
+                    return categories.includes(normalizedDropdownValue);
+                }
             });
         }
+        
         filteredData.sort(sortByBacklinks);
         if (filteredData.length === 0) {
             console.log('No data after filtering');
