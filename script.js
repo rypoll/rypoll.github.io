@@ -34,8 +34,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (dropdownValue === 'Popularity') {
             return b["L"] - a["L"]; // This sorts in descending order
         } else if (dropdownValue === 'Newest') {
-            var dateA = a["datetime_email_date"] ? new Date(a["datetime_email_date"]) : new Date('9999-12-31T23:59:59Z');
-            var dateB = b["datetime_email_date"] ? new Date(b["datetime_email_date"]) : new Date('9999-12-31T23:59:59Z');
+            var dateA = a["datetime_email_date"] ? new Date(a["datetime_email_date"]) : 
+            a["Date"] ? new Date(a["Date"].split('/').reverse().join('-') + 'T23:59:59Z') : 
+            new Date('9999-12-31T23:59:59Z');
+        
+            var dateB = b["datetime_email_date"] ? new Date(b["datetime_email_date"]) : 
+                b["Date"] ? new Date(b["Date"].split('/').reverse().join('-') + 'T23:59:59Z') : 
+                new Date('9999-12-31T23:59:59Z');
             return dateB - dateA;
         }
     
