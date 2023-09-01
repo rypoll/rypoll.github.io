@@ -146,7 +146,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function populateTable(data, start) {
         let table = document.getElementById('data-table');
+    
+        // Create a row and cell for the message
+        let messageRow = document.createElement('tr');
+        let messageCell = document.createElement('td');
+    
+        // Set the message and colspan
+        messageCell.style.textAlign = 'left';
+        messageCell.className = 'filter-label';
+
+        messageCell.textContent = `Returned ${data.length} news items`;
+        //messageCell.colSpan = 5; // or however many columns your table has
+    
+        // Append the message cell to the message row
+        messageRow.appendChild(messageCell);
+    
         table.innerHTML = ""; // clear previous content
+    
+        // Append the message row to the table
+        table.appendChild(messageRow);
     
         let slicedData = data.slice(start, start + rowsPerPage);
 
@@ -162,9 +180,11 @@ document.addEventListener("DOMContentLoaded", function() {
         
             // Set the message and colspan
             messageCell.style.textAlign = 'center';
-            messageCell.textContent = "As of yet, there's no news for today! Please filter by 'Weekly' or check out yesterday's news!";
+            messageCell.style.paddingTop = '50px'; // Adds 10px padding to the top
+            messageCell.style.marginTop = '100px';  // Adds 10px margin to the top
+            messageCell.textContent = "As of yet, there's no news for this time-frame. Please filter by 'Weekly'  or 'Monthly' to increase the time-frame. Failing that, check out other days/weeks/months.";
             
-            messageCell.colSpan = 5; // or however many columns your table has
+            messageCell.colSpan = 1; // or however many columns your table has
         
             // Append the message cell to the message row
             messageRow.appendChild(messageCell);
@@ -173,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function() {
             table.appendChild(messageRow);
         
             // Apply margin to the entire table
-            table.style.marginTop = '10%'; // or whatever value you want
+            table.style.marginTop = '20%'; // or whatever value you want
             return;
         } else {
             table.style.marginTop = '0'; // reset margin to original value
@@ -446,9 +466,9 @@ document.addEventListener("DOMContentLoaded", function() {
     function generatePagination(totalLength) {
         let paginationContainer = document.getElementById("pagination");
         paginationContainer.innerHTML = ""; // Clear previous pagination
-
+    
         let totalPages = Math.ceil(totalLength / rowsPerPage);
-
+    
         for (let i = 1; i <= totalPages; i++) {
             let pageBtn = document.createElement("button");
             pageBtn.textContent = i;
@@ -456,15 +476,22 @@ document.addEventListener("DOMContentLoaded", function() {
                 currentPage = i;
                 populateTable(filteredData, (i-1) * rowsPerPage);
                 generatePagination(filteredData.length);
+    
+                // Scroll to the top of the page
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'  // Smooth scroll
+                });
             };
-
+    
             if (currentPage === i) {
                 pageBtn.classList.add("active");
             }
-
+    
             paginationContainer.appendChild(pageBtn);
         }
     }
+    
 
 
     //Start dropdown stuff
@@ -564,7 +591,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 );
         
                 if (normalizedDropdownValue === 'ai news') {
-                    return !categories.some(category => category === 'ai tools' || otherOptions.includes(category));
+                    // Check if the row should be excluded because it only contains 'ai jobs' or 'ai tools'
+                    const excludeRow = categories.length === 1 && (categories.includes('ai jobs') || categories.includes('ai tools'));
+        
+                    // Check if the row should be included because it contains one of the desired categories
+                    const includeRow = categories.some(category => ['ai real-world applications', 'ai news', 'ai in business'].includes(category));
+        
+                    return !excludeRow && includeRow;
                 } else if (normalizedDropdownValue === 'new tech and ai tools') {
                     return categories.includes('ai tools') || categories.includes(normalizedDropdownValue);
                 } else {
@@ -677,4 +710,12 @@ document.addEventListener("DOMContentLoaded", function() {
     
 });
 
+window.addEventListener("DOMContentLoaded", (event) => {
+    const selectElement = document.getElementById("dropdown3");
+    const lastOption = selectElement.options[selectElement.options.length - 1];
+  
+    // Add a class or directly style the last option element
+    lastOption.style.fontWeight = "bold";
+  });
+  
 

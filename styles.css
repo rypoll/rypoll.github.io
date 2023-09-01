@@ -193,6 +193,7 @@ li {
   margin-left: 6px;
   flex-wrap: wrap; /* Retaining this property to allow items to wrap onto multiple lines when needed */
   gap: 6px; /* Gap between items */
+  margin-bottom: 20px;
 }
 
 
@@ -346,18 +347,20 @@ select:focus {
   font-weight: bold;
   margin-bottom: 2px;
   font-size: 12px;
-  background-color: #FF6347;
+  background-color: #02d0ae;
 }
 
 .category.making-money-with-ai { background-color: green; }
 .category.ai-real-world-applications { background-color: blue; }
-.category.writing-prompts-for-chatbot-assistants { background-color: rgb(143, 186, 0); }
+.category.writing-prompts-for-chatbot-assistants { background-color: rgb(121, 77, 255); }
 .category.ai-news { background-color: red; }
-.category.new-tech-and-ai-tools { background-color: rgb(128, 0, 77); }
-.category.ai-marketing-tools { background-color: rgb(208, 0, 255); }
-.category.ai-in-business { background-color: rgb(221, 181, 0); }
+.category.new-tech-and-ai-tools { background-color: rgb(215, 36, 255); }
+.category.ai-marketing-tools { background-color: rgb(128, 0, 77); }
+.category.ai-in-business { background-color: rgb(211, 172, 0); }
 .category.no-code-ai-use-cases { background-color: #FF6347; }
-.category.ai-tools { background-color: #4682B4; }
+.category.ai-tools { background-color: #e400d5; }
+.category.ai-jobs { background-color: #ff9b0f; }
+.category.ai-training-and-courses { background-color: #00e0e4; }
 
 
 
