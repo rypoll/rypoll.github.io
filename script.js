@@ -153,9 +153,13 @@ document.addEventListener("DOMContentLoaded", function() {
     
         // Set the message and colspan
         messageCell.style.textAlign = 'left';
+        messageCell.style.paddingLeft = '3px';
         messageCell.className = 'filter-label';
-
-        messageCell.textContent = `Returned ${data.length} news items`;
+        
+        const textColor = '#3EB489';
+        messageCell.innerHTML = `Returned <span style="color:${textColor}; font-weight: bold;">${data.length}</span> news items`;
+        
+        
         //messageCell.colSpan = 5; // or however many columns your table has
     
         // Append the message cell to the message row
