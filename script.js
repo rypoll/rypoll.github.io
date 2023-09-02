@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Set the message and colspan
         messageCell.style.textAlign = 'left';
         messageCell.style.paddingLeft = '3px';
-        messageCell.className = 'filter-label';
+        messageCell.className = 'returned-label';
         
         const textColor = '#3EB489';
         messageCell.innerHTML = `Returned <span style="color:${textColor}; font-weight: bold;">${data.length}</span> news items`;
@@ -184,8 +184,8 @@ document.addEventListener("DOMContentLoaded", function() {
         
             // Set the message and colspan
             messageCell.style.textAlign = 'center';
-            messageCell.style.paddingTop = '50px'; // Adds 10px padding to the top
-            messageCell.style.marginTop = '100px';  // Adds 10px margin to the top
+            messageCell.style.paddingTop = '10px'; // Adds 10px padding to the top
+            messageCell.style.marginTop = '10px';  // Adds 10px margin to the top
             messageCell.textContent = "As of yet, there's no news for this time-frame. Please filter by 'Weekly'  or 'Monthly' to increase the time-frame. Failing that, check out other days/weeks/months.";
             
             messageCell.colSpan = 1; // or however many columns your table has
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Create a span for the number
                     let numberSpan = document.createElement('span');
                     numberSpan.textContent = `${index + 1}. `;
-                    numberSpan.style.fontSize = '12px';         // Match the font size of the link
+                    numberSpan.style.fontSize = '1.4vh';         // Match the font size of the link
                     numberSpan.style.color = 'black';            // White color for the number
                     numberSpan.style.fontWeight = "bold";        // Bold weight
 
@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     linkElement.target = "_blank";  // Open in a new tab
                     linkElement.textContent = displayLink;
                     // Style the link
-                    linkElement.style.fontSize = '12px';         // Small font size
+                    linkElement.style.fontSize = '1.5vh';         // Small font size
                     linkElement.style.color = '#1F77B4';         // Default text color
                     linkElement.style.padding = '5px 0px';       // Some padding
                     linkElement.style.paddingRight = "15px";
@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Appending elements to the tdSeoStats
                 tdSeoStats.appendChild(combinedSpan);
         }
-            tdSeoStats.style.fontSize = "11px";  // Setting the font size
+            tdSeoStats.style.fontSize = "1.3vh";  // Setting the font size
             tdSeoStats.style.fontWeight = "bold";
             tdSeoStats.style.color = "white";
             tdSeoStats.style.paddingBottom = "20px";
@@ -585,6 +585,11 @@ document.addEventListener("DOMContentLoaded", function() {
     
         const allOptions = [...dropdown3.options].map(option => option.value.toLowerCase().replace(/-/g, ' '));
         const otherOptions = allOptions.filter(option => option !== 'ai news' && option !== 'all categories');
+        const categoryMap = {
+            "writing prompts": "writing prompts for chatbot assistants",
+            // Add other truncated-to-full mappings here
+          };
+          
         
         if (dropdown3.value !== "All Categories") {
             const normalizedDropdownValue = dropdown3.value.toLowerCase().replace(/-/g, ' ');
@@ -593,6 +598,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 const categories = row.Category.slice(1, -1).split(',').map(item => 
                     item.trim().slice(1, -1).toLowerCase().replace(/-/g, ' ')
                 );
+
+                const mappedDropdownValue = categoryMap[normalizedDropdownValue] || normalizedDropdownValue;
         
                 if (normalizedDropdownValue === 'ai news') {
                     // Check if the row should be excluded because it only contains 'ai jobs' or 'ai tools'
@@ -603,9 +610,9 @@ document.addEventListener("DOMContentLoaded", function() {
         
                     return !excludeRow && includeRow;
                 } else if (normalizedDropdownValue === 'new tech and ai tools') {
-                    return categories.includes('ai tools') || categories.includes(normalizedDropdownValue);
+                    return categories.includes('ai tools') || categories.includes(mappedDropdownValue);
                 } else {
-                    return categories.includes(normalizedDropdownValue);
+                  return categories.includes(mappedDropdownValue);
                 }
             });
         }

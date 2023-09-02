@@ -9,6 +9,7 @@ body, html {
   align-items: center; /* Centering children */
   padding-top: 1%;
   overflow-x: hidden;
+  font-size: 2vh;
   
   
 }
@@ -94,11 +95,25 @@ li {
   .title-container, .table-container {
       width: 72%;
   }
+  .select {
+    font-size: 12px;
+  }
+
+  .filter-label {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 900px) {
   .title-container, .table-container {
       width: 78%;
+  }
+  .select {
+    font-size: 10px;
+  }
+
+  .filter-label {
+    font-size: 8px;
   }
 }
 
@@ -109,8 +124,58 @@ li {
   .title-container{
     padding-bottom: 15%;
   }
+  select {
+    font-size: 12px !important;
+    padding-right: 25px !important;
+  }
+
+  .filter-label {
+    font-size: 10px !important;
+    padding-right: 0px !important;
+  }
+
 }
 
+@media (max-width: 426px) {
+  .title-container, .table-container {
+      width: 90%;
+  }
+  .title-container{
+    padding-bottom: 15%;
+  }
+  select {
+    font-size: 8px !important;
+    padding-right: 20px !important;
+    background-size: 5px 3px !important;
+
+  }
+
+  .filter-label {
+    font-size: 6px !important;
+    padding-right: 0px !important;
+  }
+
+}
+
+@media (max-width: 376px) {
+  .title-container, .table-container {
+      width: 90%;
+  }
+  .title-container{
+    padding-bottom: 15%;
+  }
+  select {
+    font-size: 6px !important;
+    padding-right: 25px !important;
+
+  }
+
+  .filter-label {
+    font-size: 4px !important;
+    padding-right: 0px !important;
+  }
+
+}
 
 
 
@@ -194,6 +259,8 @@ li {
   flex-wrap: wrap; /* Retaining this property to allow items to wrap onto multiple lines when needed */
   gap: 6px; /* Gap between items */
   margin-bottom: 20px;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;  
 }
 
 
@@ -221,6 +288,12 @@ li {
   margin-bottom: -3px;
 }
 
+.returned-label {
+  color: #61747a;
+  font-size: 1.3vh;
+  /* text-align: center; */
+  margin-bottom: -3px;
+}
 
 
 .table-container {
@@ -308,7 +381,7 @@ select:focus {
   padding: 6px 12px;
   background-color: #3EB489;
   color: #FFFFFF;
-  font-size: 12px;
+  font-size: 1.5vh;
   border: none;
   border-radius: 5px;
 }
@@ -346,7 +419,7 @@ select:focus {
   display: inline-block; /* so they line up next to each other */
   font-weight: bold;
   margin-bottom: 2px;
-  font-size: 12px;
+  font-size: 1.4vh;
   background-color: #02d0ae;
 }
 
