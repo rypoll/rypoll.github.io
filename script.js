@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Create a span for the number
                     let numberSpan = document.createElement('span');
                     numberSpan.textContent = `${index + 1}. `;
-                    numberSpan.style.fontSize = '1.4vh';         // Match the font size of the link
+                    numberSpan.style.fontSize = '1.5vh';         // Match the font size of the link
                     numberSpan.style.color = 'black';            // White color for the number
                     numberSpan.style.fontWeight = "bold";        // Bold weight
 
@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Appending elements to the tdSeoStats
                 tdSeoStats.appendChild(combinedSpan);
         }
-            tdSeoStats.style.fontSize = "1.3vh";  // Setting the font size
+            tdSeoStats.style.fontSize = "1.5vh";  // Setting the font size
             tdSeoStats.style.fontWeight = "bold";
             tdSeoStats.style.color = "white";
             tdSeoStats.style.paddingBottom = "20px";
