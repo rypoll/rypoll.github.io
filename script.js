@@ -215,6 +215,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
          else {
             table.style.marginTop = '0'; // reset margin to original value
+            firstLoad = false;
         }
         
 
