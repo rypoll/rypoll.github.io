@@ -198,17 +198,22 @@ document.addEventListener("DOMContentLoaded", function() {
         
             // Apply margin to the entire table
             table.style.marginTop = '10%'; // or whatever value you want
-            if (firstLoad) {
-                // Change dropdown to 'All Categories'
-                document.getElementById("dropdown3").value = "All Categories";
-                firstLoad = false;  // Reset the variable for future loads
-            }
             return;
+
 
     
 
 
-        } else {
+        }
+        else if (data.length < 6 && firstLoad) {
+            // When fewer than 6 rows are returned on first load
+            const dropdown3 = document.getElementById("dropdown3");
+            dropdown3.value = "All Categories";
+            dropdown3.dispatchEvent(new Event('change'));
+            firstLoad = false;
+        }
+
+         else {
             table.style.marginTop = '0'; // reset margin to original value
         }
         
