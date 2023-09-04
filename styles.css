@@ -144,14 +144,14 @@ li {
     padding-bottom: 15%;
   }
   select {
-    font-size: 9px !important;
+    font-size: 10px !important;
     padding-right: 20px !important;
     background-size: 5px 3px !important;
 
   }
 
   .filter-label {
-    font-size: 8px !important;
+    font-size: 9px !important;
     padding-right: 0px !important;
   }
 
@@ -165,13 +165,13 @@ li {
     padding-bottom: 15%;
   }
   select {
-    font-size: 9px !important;
+    font-size: 10px !important;
     padding-right: 25px !important;
 
   }
 
   .filter-label {
-    font-size: 8px !important;
+    font-size: 9px !important;
     padding-right: 0px !important;
   }
 
@@ -290,7 +290,7 @@ li {
 
 .returned-label {
   color: #61747a;
-  font-size: 1.3vh;
+  font-size: 10px;
   /* text-align: center; */
   margin-bottom: -3px;
 }

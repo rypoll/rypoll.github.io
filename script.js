@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
         tdElement.style.paddingRight = "15px";  // Set the right padding
     }
 
-
+    let firstLoad = true;
 
     function populateTable(data, start) {
         let table = document.getElementById('data-table');
@@ -197,8 +197,17 @@ document.addEventListener("DOMContentLoaded", function() {
             table.appendChild(messageRow);
         
             // Apply margin to the entire table
-            table.style.marginTop = '20%'; // or whatever value you want
+            table.style.marginTop = '10%'; // or whatever value you want
+            if (firstLoad) {
+                // Change dropdown to 'All Categories'
+                document.getElementById("dropdown3").value = "All Categories";
+                firstLoad = false;  // Reset the variable for future loads
+            }
             return;
+
+    
+
+
         } else {
             table.style.marginTop = '0'; // reset margin to original value
         }
