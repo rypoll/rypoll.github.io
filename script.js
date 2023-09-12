@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Create a span for the number
                     let numberSpan = document.createElement('span');
                     numberSpan.textContent = `${index + 1}. `;
-                    numberSpan.style.fontSize = '1.5vh';         // Match the font size of the link
+                    numberSpan.style.fontSize = '11px';         // Match the font size of the link
                     numberSpan.style.color = 'black';            // White color for the number
                     numberSpan.style.fontWeight = "bold";        // Bold weight
 
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     linkElement.target = "_blank";  // Open in a new tab
                     linkElement.textContent = displayLink;
                     // Style the link
-                    linkElement.style.fontSize = '1.5vh';         // Small font size
+                    linkElement.style.fontSize = '11px';         // Small font size
                     linkElement.style.color = '#1F77B4';         // Default text color
                     linkElement.style.padding = '5px 0px';       // Some padding
                     linkElement.style.paddingRight = "15px";
@@ -360,7 +360,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 let displayCat = cat.split(/[\s-]/).map(word => {   // Split on spaces or hyphens
                     if (word.toLowerCase() === 'ai') {
                         return 'AI';  // Special case for the word 'AI'
+                    } else if (word.toLowerCase() === 'llms') {
+                        return 'LLMs';  // Special case for the word 'Llm'
                     }
+                    
                     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
                 }).join(' ').replace(/ - /g, '-');  // Rejoin with spaces, then replace spaced hyphens with just hyphens
                 
@@ -428,7 +431,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Appending elements to the tdSeoStats
                 tdSeoStats.appendChild(combinedSpan);
         }
-            tdSeoStats.style.fontSize = "1.5vh";  // Setting the font size
+            tdSeoStats.style.fontSize = "11px";  // Setting the font size
             tdSeoStats.style.fontWeight = "bold";
             tdSeoStats.style.color = "white";
             tdSeoStats.style.paddingBottom = "20px";
@@ -613,6 +616,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const categories = row.Category.slice(1, -1).split(',').map(item => 
                     item.trim().slice(1, -1).toLowerCase().replace(/-/g, ' ')
                 );
+                
 
                 const mappedDropdownValue = categoryMap[normalizedDropdownValue] || normalizedDropdownValue;
         

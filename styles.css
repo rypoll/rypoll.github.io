@@ -9,7 +9,7 @@ body, html {
   align-items: center; /* Centering children */
   padding-top: 1%;
   overflow-x: hidden;
-  font-size: 2vh;
+  font-size: 14px;
   
   
 }
@@ -79,21 +79,25 @@ li {
 
 
 @media (max-width: 2000px) {
-  .title-container, .table-container {
+  .table-container {
       width: 55%;
   }
+
+  .title-container {
+    width: 45%;
+}
 }
 
 
 @media (max-width: 1200px) {
   .title-container, .table-container {
-      width: 70%;
+      width: 65%;
   }
 }
 
 @media (max-width: 1024px) {
   .title-container, .table-container {
-      width: 72%;
+      width: 65%;
   }
   .select {
     font-size: 12px;
@@ -193,7 +197,7 @@ li {
 
 
 .about-link {
-  font-size: 1.3vh;
+  font-size: 10px;
   color: #1F77B4;
   text-decoration: none;
   text-align: left;
@@ -215,11 +219,11 @@ li {
   /* color: #3EB489; */
 
   top: -1px;
-  font-size: 1.3vh;
+  font-size: 12px;
 }
 
 .info-icon {
-  font-size: 0.1vh;
+  font-size: 5px;
 }
 
 .about-link .arrow {
@@ -381,7 +385,7 @@ select:focus {
   padding: 6px 12px;
   background-color: #3EB489;
   color: #FFFFFF;
-  font-size: 1.5vh;
+  font-size: 12px;
   border: none;
   border-radius: 5px;
 }
@@ -419,7 +423,7 @@ select:focus {
   display: inline-block; /* so they line up next to each other */
   font-weight: bold;
   margin-bottom: 2px;
-  font-size: 1.5vh;
+  font-size: 11px;
   background-color: #02d0ae;
 }
 
@@ -434,6 +438,8 @@ select:focus {
 .category.ai-tools { background-color: #e400d5; }
 .category.ai-jobs { background-color: #ff9b0f; }
 .category.ai-training-and-courses { background-color: #00e0e4; }
+.category.generative-imaging { background-color: #007c7e; }
+.category.chatbots-and-llms { background-color: #4389af; }
 
 
 
