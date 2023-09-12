@@ -78,7 +78,10 @@ li {
 }
 
 
-@media (max-width: 2000px) {
+@media (max-width: 4000px) {
+  body {
+    font-size: 18px;
+  }
   .table-container {
       width: 55%;
   }
@@ -90,6 +93,9 @@ li {
 
 
 @media (max-width: 1200px) {
+  body {
+    font-size: 14px;
+  }
   .title-container, .table-container {
       width: 65%;
   }
@@ -100,7 +106,7 @@ li {
       width: 65%;
   }
   .select {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .filter-label {
@@ -122,6 +128,9 @@ li {
 }
 
 @media (max-width: 768px) {
+  body{
+    font-size: 18px;
+  }
   .title-container, .table-container {
       width: 90%;
   }
@@ -129,12 +138,12 @@ li {
     padding-bottom: 15%;
   }
   select {
-    font-size: 12px !important;
+    font-size: 14px !important;
     padding-right: 25px !important;
   }
 
   .filter-label {
-    font-size: 10px !important;
+    font-size: 12px !important;
     padding-right: 2px !important;
   }
 
