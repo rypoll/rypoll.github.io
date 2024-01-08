@@ -477,13 +477,17 @@ document.addEventListener("DOMContentLoaded", function() {
         return `${month}/${year}`;
     }
     
-    function filterDataByMonth(monthIndex) {
-        // Convert the monthIndex to a string format like "01/2023"
-        const monthString = (`0${monthIndex}`).slice(-2) + "/2023";
+    function filterDataByMonth(selectedValue) {
+        // Split the selectedValue to get year and month
+        const [year, month] = selectedValue.split('-').map(Number); // Convert them to numbers
     
-        // Filter the data by the selected month
-        return filteredData.filter(row => extractMonthYearFromDate(row.Date) === monthString); // return the filtered data
+        // Filter the data based on the selected month and year
+        return filteredData.filter(row => {
+            const [day, monthFromData, yearFromData] = row.Date.split("/").map(Number);
+            return monthFromData === month && yearFromData === year;
+        });
     }
+    
 
     function generatePagination(totalLength) {
         let paginationContainer = document.getElementById("pagination");
@@ -692,17 +696,21 @@ document.addEventListener("DOMContentLoaded", function() {
         // Adjust the current date to the beginning of the current week (i.e., Monday)
         currentDate.setUTCDate(currentDate.getUTCDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
     
-        let firstMondayOfYear = new Date(currentDate.getFullYear(), 0, 2); // Get the first Monday of the current year
+        // Set the starting point to April 2023
+        let startYear = currentDate.getFullYear() === 2023 ? 2023 : 2022; // If it's already 2023, use 2023, otherwise, use 2022
+        let firstMondayOfApril = new Date(startYear, 3, 1); // April 1st of the start year
+        let firstMondayOfAprilDayOfWeek = firstMondayOfApril.getUTCDay();
+        firstMondayOfApril.setUTCDate(firstMondayOfApril.getUTCDate() + (firstMondayOfAprilDayOfWeek === 0 ? 1 : 8 - firstMondayOfAprilDayOfWeek));
     
         let weekCommencingDates = []; // Array to hold all week commencing dates
-        
-        while (currentDate >= firstMondayOfYear) {
+    
+        while (currentDate >= firstMondayOfApril) {
             weekCommencingDates.push(new Date(currentDate)); // Push the current week commencing date to the array
             currentDate.setDate(currentDate.getDate() - 7); // Go back one week
         }
     
         // Loop through the array in its current order so the most recent week commencing date is added first
-        for(let date of weekCommencingDates) {
+        for (let date of weekCommencingDates) {
             let optionText = date.toLocaleDateString('en-GB'); // Format the date
             dropdown2.add(new Option(optionText, optionText)); // Add to dropdown
         }
@@ -714,16 +722,32 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     
+    
 
     function populateMonthly() {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         let today = new Date();
-        let month = today.getMonth();
-        while (month >= 0) {
-            dropdown2.add(new Option(`${months[month]} 2023`, month + 1));
-            month--;
+        let currentYear = today.getFullYear();
+        let currentMonth = today.getMonth();
+        let startYear = 2023; // Start from 2023
+    
+        dropdown2.innerHTML = ''; // Clear existing options
+    
+        // Loop over years and months to populate the dropdown
+        for (let year = currentYear; year >= startYear; year--) {
+            for (let month = (year === currentYear ? currentMonth : 11); month >= 0; month--) {
+                let optionText = `${months[month]} ${year}`;
+                let optionValue = `${year}-${month + 1}`;
+                dropdown2.add(new Option(optionText, optionValue));
+    
+                // Set the current month and year as the default
+                if (year === currentYear && month === currentMonth) {
+                    dropdown2.value = optionValue;
+                }
+            }
         }
     }
+    
 
 
     
